@@ -13,10 +13,11 @@
   "keywords": [
     "klenty",
     "test",
-    "mocha"
+    "tdd",
+    "unit testing"
   ],
   "author": "Muthu Kumar <@MKRhere> (https://mkr.pw)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vengatkrishnaraj/testsuite/issues"
   },

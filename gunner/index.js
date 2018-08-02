@@ -38,4 +38,4 @@ class Gunner {
 }
 
 module.exports = Gunner;
-module.exports.assert = _expect;
+module.exports.expect = _expect;
