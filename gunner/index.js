@@ -1,35 +1,7 @@
-const isEq = require('@codefeathers/iseq');
+const _runTests = require('./lib/runTests');
+const _expect = require('./lib/expect');
 
-const constants = {
-	pass: 'pass',
-	fail: 'fail',
-};
-
-const _assert = (bool, assertion) => bool ? Promise.resolve() : Promise.reject(assertion);
-
-const stringify = obj =>
-	typeof obj === 'object'
-		? JSON.stringify(obj)
-		: obj;
-
-const be = a => {
-	const fn = b => _assert(a === b, `${a} is not equal to ${b}`);
-	fn.deepEqual = b => _assert(isEq(a, b), `${stringify(a)} is not deeply equal to ${stringify(b)}`);
-	fn.true = () => _assert(a === true, `${a} is not true`);
-	return fn;
-};
-
-const expect = thing => ({
-	to: {
-		be: be(thing),
-	},
-});
-
-const runTests = tests => tests.map(test =>
-	test.test()
-	.then(() => ({ description: test.description, result: constants.pass }))
-	.catch(e => ({ description: test.description, result: constants.fail, error: e }))
-);
+const { stringify } = require('../util/helpers');
 
 class Gunner {
 
@@ -40,14 +12,30 @@ class Gunner {
 	test (description, test) {
 		this.tests.push({
 			description,
-			test: () => test(expect),
+			test: () => test(_expect),
 		});
 	}
 
 	run () {
-		return Promise.all(runTests(this.tests));
+		return _runTests(this.tests)
+		.then(results => {
+			const success = results.filter(r => r.result === 'pass');
+			const successPercent = Math.floor(success.length/results.length * 100);
+
+			console.log(
+				`\n${success.length} tests passed of ${results.length}`,
+				`[${successPercent}% success]\n`
+			);
+			results.forEach(r => {
+				console.log(`${r.result === 'pass' ? '✅' : '❌'} ::`,
+					`${r.description}`,
+					`${r.error ? `\n    Traceback:\n    ${stringify(r.error)}` : ''}`);
+			});
+			return results;
+		});
 	}
 
 }
 
 module.exports = Gunner;
+module.exports.assert = _expect;
