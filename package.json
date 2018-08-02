@@ -1,0 +1,29 @@
+{
+  "name": "@klenty/gunner",
+  "version": "0.0.1",
+  "description": "Multi-strategy test runner.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vengatkrishnaraj/gunner.git"
+  },
+  "keywords": [
+    "klenty",
+    "test",
+    "mocha"
+  ],
+  "author": "Muthu Kumar <@MKRhere> (https://mkr.pw)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vengatkrishnaraj/testsuite/issues"
+  },
+  "homepage": "https://github.com/vengatkrishnaraj/testsuite#readme",
+  "dependencies": {
+    "@codefeathers/iseq": "^1.2.1",
+    "eslint": "^5.2.0",
+    "fs-extra": "^7.0.0"
+  }
+}
