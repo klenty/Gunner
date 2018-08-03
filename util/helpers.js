@@ -52,4 +52,7 @@ module.exports = {
 	short : (pred, shorter) =>
 		fn => value => pred(value) ? shorter(value) : fn(value),
 
+	/* Check if object has given property */
+	hasProp : obj => prop => prop in obj,
+
 };
