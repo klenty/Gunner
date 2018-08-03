@@ -1,3 +1,5 @@
+const { log } = console;
+
 const _runTests = require('./lib/runTests');
 const _expect = require('./lib/expect');
 
@@ -16,21 +18,31 @@ class Gunner {
 		});
 	}
 
-	run () {
+	run (options = {}) {
+		process.stdout.write(`Running ${this.tests.length} tests...`);
 		return _runTests(this.tests)
 		.then(results => {
+			process.stdout.clearLine();
+			process.stdout.cursorTo(0);
 			const success = results.filter(r => r.result === 'pass');
 			const successPercent = Math.floor(success.length/results.length * 100);
 
-			console.log(
-				`\n${success.length} tests passed of ${results.length}`,
-				`[${successPercent}% success]\n`
-			);
-			results.forEach(r => {
-				console.log(`${r.result === 'pass' ? '✅' : '❌'} ::`,
-					`${r.description}`,
-					`${r.error ? `\n    Traceback:\n    ${stringify(r.error)}` : ''}`);
-			});
+			if (('log' in options && options.log) || !('log' in options)) {
+				log(
+					`\n${success.length} tests passed of ${results.length}`,
+					`[${successPercent}% success]\n`
+				);
+				results.forEach(r => {
+					log(`${r.result === 'pass' ? '✅' : '❌'} ::`,
+						`${r.description}`,
+						`${options.stack ?
+							r.error
+								? `\n    Traceback:\n    ${stringify(r.error)}`
+								: ''
+							: ''}`);
+				});
+			}
+
 			return results;
 		});
 	}
