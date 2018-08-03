@@ -1,5 +1,8 @@
 module.exports = {
 
+	/* Returns true if a promise is passed */
+	isPromise : prom => prom && (typeof prom.then === 'function'),
+
 	/* Flattens an array of arrays to an array */
 	flatten : arrData => [].concat.apply([], arrData),
 
