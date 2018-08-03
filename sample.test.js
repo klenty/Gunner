@@ -8,6 +8,38 @@ gunner.test(`objects aren't deeply equal`, expect => expect({a : 1}).deepEqual({
 
 const a = 1;
 gunner.test('expression should be true', expect => expect(a === 1).isTrue());
-gunner.test('promise must reject', expect => expect(Promise.reject(new Error('no'))).equal('rejection'));
+gunner.test('promise must reject', expect =>
+	expect(Promise.reject(new Error('Promise Rejected'))).equal('no rejection'));
 
-gunner.run();
+gunner.test('multiple expect', expect => {
+
+	const a = { };
+	a.b = 1;
+	a.c = 2;
+
+	return [
+		expect(a).hasProp('b'),
+		expect(a).hasPair('c', 3),
+	];
+
+});
+
+const flamethrower = require('./throwingFunc');
+
+gunner.test('should catch error', expect => {
+	return expect(flamethrower()).equal(5);
+});
+
+gunner.test('should be a Promise (resolved)', expect =>
+	expect(Promise.resolve()).isPromise());
+
+gunner.test('should be a Promise (rejected)', expect =>
+	expect(Promise.reject()).isPromise());
+
+gunner.test('should resolve to 5', expect =>
+	expect(Promise.resolve(5)).resolvesTo(5));
+
+gunner.test('should not resolve to 5', expect =>
+	expect(Promise.resolve()).resolvesTo(5));
+
+gunner.run({ trace: false });
