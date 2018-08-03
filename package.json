@@ -1,6 +1,6 @@
 {
   "name": "@klenty/gunner",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "Multi-strategy test runner.",
   "main": "index.js",
   "scripts": {
