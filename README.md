@@ -6,7 +6,9 @@
 
 > Gunner is a zero magic, fast test-runner and assertion framework. There are no magic globals or CLI specific interface.
 
-## Usage
+## Requirements & Usage
+
+`Gunner` uses very modern JavaScript, and hence requires node 10+ currently.
 
 Create a new `Gunner` instance and simply write your tests. The assertion methods are passed in as the callback to the test function.
 
@@ -22,15 +24,18 @@ gunner.run();
 
 ## API
 
----
-### [new Gunner(options)](#gunner-constructor)
-### [Gunner#test(title, implementation)](#gunnertest)
-### [Gunner#run(options)](#gunnerrun)
+#### [Gunner.constructor](#new-gunner)
+#### [Gunner#test(title, implementation)](#gunnertest)
+#### [Gunner#run(options)](#gunnerrun)
 ---
 
-### Gunner constructor
+### new Gunner
 
 Creates a new Gunner instance.
+
+#### Options
+
+- **`name`** [default: undefined]: A name for this Gunner instance.
 
 #### Usage
 
