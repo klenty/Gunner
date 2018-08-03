@@ -1,17 +1,15 @@
 {
   "name": "@klenty/gunner",
-  "version": "0.1.5",
-  "description": "Multi-strategy test runner.",
+  "version": "0.2.0",
+  "description": "Zero magic, fast test-runner and assertion framework. No magic globals.",
   "main": "index.js",
-  "scripts": {
-    "test": "npm run start"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vengatkrishnaraj/gunner.git"
   },
   "keywords": [
     "klenty",
+    "gunner",
     "test",
     "tdd",
     "unit testing"

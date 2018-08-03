@@ -40,7 +40,7 @@ const gunner = new Gunner(options);
 
 ### Gunner#test
 
-Registers a new test.
+Registers a new test. A test can have multiple expect statements. They should be returned as an array. The first expect to fail will cause the test to fail.
 
 #### Usage
 
@@ -49,14 +49,30 @@ gunner.test('sum should equal 3', expect => {
 	const sum = 1 + 2;
 	return expect(sum).equal(3);
 });
+
+gunner.test('multiple expects should be true', expect => {
+	const a = 1 + 2;
+	const b = 'Hello World';
+
+	return ([
+		expect(a).equal(3),
+		expect(b).equal('Goodbye World'),
+	]);
+});
 ```
 
 ### Gunner#run
 
-Starts running Gunner tests.
+Starts running Gunner tests. Takes an options object as optional parameter.
+
+#### Options
+
+- **`log`** [default: true]: Turn logs on or off (returns array of results)
+- **`trace`** [default: false]: Turn stack traces on or off
 
 #### Usage
 
 ```JavaScript
+const options = { logs: true, trace: true };
 gunner.run(options);
 ```
