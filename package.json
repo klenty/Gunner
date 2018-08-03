@@ -1,6 +1,6 @@
 {
   "name": "@klenty/gunner",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Zero magic, fast test-runner and assertion framework. No magic globals.",
   "main": "index.js",
   "repository": {
