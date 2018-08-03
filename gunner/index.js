@@ -7,8 +7,9 @@ const { stringify, hasProp } = require('../util/helpers');
 
 class Gunner {
 
-	constructor () {
+	constructor (options = {}) {
 		this.tests = [];
+		this.name = options.name;
 	}
 
 	test (description, test) {
@@ -27,7 +28,7 @@ class Gunner {
 
 	run (options = {}) {
 		const shouldLog = (hasProp(options)('log') && options.log) || !(hasProp(options)('log'));
-		if (shouldLog) process.stdout.write(`Running ${this.tests.length} tests...`);
+		if (shouldLog) process.stdout.write(`Running ${this.tests.length} tests${this.name ? ` for ${this.name}` : ''}...`);
 		return _runTests(this.tests)
 		.then(results => {
 			if (shouldLog) {
