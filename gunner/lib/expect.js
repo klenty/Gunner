@@ -1,33 +1,43 @@
 const isEq = require('@codefeathers/iseq');
 
-const { stringify } = require('../../util/helpers');
+const { stringify, liftPromise, isPromise } = require('../../util/helpers');
 const _assertPromise = require('./assertPromise');
 
-const expectPromise = (pred, statement, options = {}) => a => (...b) => {
-	if(a && typeof a.then === 'function') {
-		return (
-			a
-			.then(x =>
-				_assertPromise(
-					pred(a, ...b),
-					statement(x, ...b)
-				)
+const assertPromise = (
+	pred,
+	statement,
+	value,
+	original,
+	...testValues
+) => _assertPromise(
+	pred(original, ...testValues),
+	statement(value, ...testValues)
+);
+
+const expectPromise = (pred, statement, options = {}) =>
+	toTest =>
+		(...testValues) =>
+			liftPromise(
+				x => assertPromise(
+					pred,
+					statement,
+					x,
+					toTest,
+					...testValues
+				),
+				toTest
 			)
-			.catch(e =>
-				options.shouldNotCatch
-					? _assertPromise(
-						pred(a, ...b),
-						statement(e, ...b)
+			.catch(rejectedValue =>
+				options.shouldCatch
+					? assertPromise(
+						pred,
+						statement,
+						rejectedValue,
+						toTest,
+						...testValues
 					)
-					: Promise.reject(e)
-			)
-		);
-	}
-	return _assertPromise(
-		pred(a, ...b),
-		statement(a, ...b)
-	);
-};
+					: Promise.reject(rejectedValue)
+			);
 
 const expect = thing => {
 
@@ -54,17 +64,17 @@ const expect = thing => {
 			(a, b, c) => `Pair <${b}, ${c}> does not exist in ${stringify(a)}`,
 		)(thing),
 		resolvesTo : expectPromise(
-			(a, b) => (a && typeof a.then === 'function')
+			(a, b) => isPromise(a)
 				? a.then(x => x === b ? Promise.resolve() : Promise.reject())
 				: Promise.reject(`${a} was not a Promise`),
 			(a, b) => `${a} does not resolve to ${b}`,
 		)(thing),
 		isPromise : expectPromise(
-			a => (a && typeof a.then === 'function')
+			a => isPromise(a)
 				? a.then(() => Promise.resolve()).catch(() => Promise.resolve())
 				: Promise.reject(),
 			a => `${a} is not a Promise`,
-			{ shouldNotCatch: true },
+			{ shouldCatch: true },
 		)(thing),
 	});
 
