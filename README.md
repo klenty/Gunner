@@ -54,7 +54,11 @@ gunner.test('sum should equal 3', expect => {
 	const sum = 1 + 2;
 	return expect(sum).equal(3);
 });
+```
 
+Expecting multiple results:
+
+```JavaScript
 gunner.test('multiple expects should be true', expect => {
 	const a = 1 + 2;
 	const b = 'Hello World';
@@ -64,6 +68,22 @@ gunner.test('multiple expects should be true', expect => {
 		expect(b).equal('Goodbye World'),
 	]);
 });
+```
+
+Asynchronous tests:
+
+```JavaScript
+gunner.test('asynchronous test', async expect => {
+
+	const response = await axios.post(url, request);
+	const userObject = await db.find('userdetails', { username });
+
+	return [
+		expect(response.status).equal(200);
+		expect(userObject).deepEquals(testUser);
+	];
+
+})
 ```
 
 ### Gunner#run
