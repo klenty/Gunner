@@ -1,7 +1,6 @@
 'use strict';
 
 const { isPromise } = require('../../util/helpers');
-
 const { pass, fail } = require('./constants');
 
 const runTests = tests => Promise.all(tests.map(each => {

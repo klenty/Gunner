@@ -28,13 +28,11 @@ class Gunner {
 
 	run (options = {}) {
 		const shouldLog = (hasProp(options)('log') && options.log) || !(hasProp(options)('log'));
-		if (shouldLog) process.stdout.write(`Running ${this.tests.length} tests${this.name ? ` for ${this.name}` : ''}...`);
 		return _runTests(this.tests)
 		.then(results => {
 			if (shouldLog) {
-				process.stdout.clearLine();
-				process.stdout.cursorTo(0);
 				const success = results.filter(r => r.result === 'pass');
+				results.passing = success.length;
 				const successPercent = Math.floor(success.length/results.length * 100);
 				log(
 					`\n${success.length} tests passed of ${results.length}`,
@@ -51,6 +49,14 @@ class Gunner {
 				});
 			}
 
+			return results;
+		})
+		.then(results => {
+			if (options.exit) {
+				if(results.passing < results.length)
+					process.exit(1);
+				process.exit(0);
+			}
 			return results;
 		});
 	}

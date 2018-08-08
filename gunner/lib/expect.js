@@ -1,40 +1,24 @@
 const isEq = require('@codefeathers/iseq');
 
-const { stringify, liftPromise, isPromise } = require('../../util/helpers');
+const { liftPromise, stringify, isPromise } = require('../../util/helpers');
 const _assertPromise = require('./assertPromise');
 
-const assertPromise = (
-	pred,
-	statement,
-	value,
-	original,
-	...testValues
-) => _assertPromise(
-	pred(original, ...testValues),
-	statement(value, ...testValues)
-);
 
 const expectPromise = (pred, statement, options = {}) =>
 	toTest =>
 		(...testValues) =>
 			liftPromise(
-				x => assertPromise(
-					pred,
-					statement,
-					x,
-					toTest,
-					...testValues
+				resolvedValue => _assertPromise(
+					pred(toTest, ...testValues),
+					statement(resolvedValue, ...testValues),
 				),
-				toTest
+				toTest,
 			)
 			.catch(rejectedValue =>
 				options.shouldCatch
-					? assertPromise(
-						pred,
-						statement,
-						rejectedValue,
-						toTest,
-						...testValues
+					? _assertPromise(
+						pred(toTest, ...testValues),
+						statement(rejectedValue, ...testValues),
 					)
 					: Promise.reject(rejectedValue)
 			);
