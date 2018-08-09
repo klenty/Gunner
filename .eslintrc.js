@@ -25,5 +25,6 @@ module.exports = {
 		"linebreak-style": [ "error", "unix" ],
 		"semi": [ "error", "always" ],
 		"eqeqeq": [ "error", "always", {"null": "ignore"} ],
+		"no-global-assign": 0,
 	}
 };

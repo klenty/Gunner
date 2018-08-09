@@ -1,3 +1,5 @@
+const stringify = require('json-stringify-safe');
+
 module.exports = {
 
 	/* Returns true if a promise is passed */
@@ -48,7 +50,7 @@ module.exports = {
 	/* Stringifies object or coerces to string */
 	stringify : obj =>
 		typeof obj === 'object'
-			? (obj.stack || JSON.stringify(obj))
+			? (obj.stack || stringify(obj))
 			: obj,
 
 	/* Short circuits with given value on pred. Else calls function */

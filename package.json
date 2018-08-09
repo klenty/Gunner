@@ -1,28 +1,29 @@
 {
-  "name": "@klenty/gunner",
-  "version": "0.2.5",
-  "description": "Zero magic, fast test-runner and assertion framework. No magic globals.",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vengatkrishnaraj/gunner.git"
-  },
-  "keywords": [
-    "klenty",
-    "gunner",
-    "test",
-    "tdd",
-    "unit testing"
-  ],
-  "author": "Muthu Kumar <@MKRhere> (https://mkr.pw)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vengatkrishnaraj/testsuite/issues"
-  },
-  "homepage": "https://github.com/vengatkrishnaraj/testsuite#readme",
-  "dependencies": {
-    "@codefeathers/iseq": "^1.2.1",
-    "eslint": "^5.2.0",
-    "fs-extra": "^7.0.0"
-  }
+	"name": "@klenty/gunner",
+	"version": "0.3.0",
+	"description": "Zero magic, fast test-runner and assertion framework. No magic globals.",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/klenty/gunner.git"
+	},
+	"keywords": [
+		"klenty",
+		"gunner",
+		"test",
+		"tdd",
+		"unit testing"
+	],
+	"author": "Muthu Kumar <@MKRhere> (https://mkr.pw)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/klenty/gunner/issues"
+	},
+	"homepage": "https://github.com/klenty/gunner#readme",
+	"dependencies": {
+		"@codefeathers/iseq": "^1.2.1",
+		"bluebird": "^3.5.1",
+		"eslint": "^5.2.0",
+		"json-stringify-safe": "^5.0.1"
+	}
 }
