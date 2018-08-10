@@ -1,8 +1,7 @@
 const isEq = require('@codefeathers/iseq');
 
-const { liftPromise, stringify, isPromise } = require('../../util/helpers');
+const { liftPromise, stringify, isPromise } = require('../util');
 const _assertPromise = require('./assertPromise');
-
 
 const expectPromise = (pred, statement, options = {}) =>
 	toTest =>

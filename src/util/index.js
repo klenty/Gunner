@@ -1,9 +1,12 @@
 const stringify = require('json-stringify-safe');
 
+/* Returns true if a promise is passed */
+const isPromise = prom => prom && (typeof prom.then === 'function');
+
 module.exports = {
 
 	/* Returns true if a promise is passed */
-	isPromise : prom => prom && (typeof prom.then === 'function'),
+	isPromise,
 
 	/* Flattens an array of arrays to an array */
 	flatten : arrData => [].concat.apply([], arrData),
@@ -26,7 +29,7 @@ module.exports = {
 	/* Pipe a value or promise through any number of unary functions */
 	pipe: (...fns) =>
 		arg => fns.reduce((acc, fn) =>
-			typeof acc.then === 'function'
+			isPromise(acc)
 				? acc.then(fn)
 				: fn(acc), arg),
 
@@ -43,7 +46,7 @@ module.exports = {
 
 	/* Lift promises into a function */
 	liftPromise : (fn, thing) =>
-		typeof thing.then === 'function'
+		isPromise(thing)
 			? thing.then(fn)
 			: fn(thing),
 

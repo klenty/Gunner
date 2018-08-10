@@ -1,6 +1,8 @@
 dependencies:
   '@codefeathers/iseq': 1.2.1
+  '@codefeathers/promise.object': 0.9.5
   bluebird: 3.5.1
+  chalk: 2.4.1
   eslint: 5.2.0
   json-stringify-safe: 5.0.1
 packages:
@@ -8,6 +10,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-zUHiKGdKZQlWBfKVacbdVtlodsw=
+  /@codefeathers/promise.object/0.9.5:
+    dev: false
+    resolution:
+      integrity: sha1-YBDLXpC4vhz12WrDHJKr/F8K/zA=
   /acorn-jsx/4.1.1:
     dependencies:
       acorn: 5.7.1
@@ -1043,6 +1049,8 @@ shrinkwrapMinorVersion: 8
 shrinkwrapVersion: 3
 specifiers:
   '@codefeathers/iseq': ^1.2.1
+  '@codefeathers/promise.object': ^0.9.5
   bluebird: ^3.5.1
+  chalk: ^2.4.1
   eslint: ^5.2.0
   json-stringify-safe: ^5.0.1

@@ -1,21 +1,24 @@
 'use strict';
 
 const { log } = console;
+const chalk = require('chalk');
 
 Promise = require('bluebird');
+Promise.object = require('@codefeathers/promise.object');
 
 const _runTests = require('./lib/runTests');
 const _expect = require('./lib/expect');
 
-const { stringify, hasProp } = require('../util/helpers');
+const { stringify, hasProp } = require('./util');
+const symbols = require('./util/symbols');
 
 class Gunner {
 
 	constructor (options = {}) {
 		this.__hooks__ = {
 			before: {
-				'@start': [],
-				'@end': [],
+				[symbols.Start]: [],
+				[symbols.Stop]: [],
 				'*': [],
 			},
 			after: {
@@ -37,9 +40,9 @@ class Gunner {
 
 		this.__tests__.push({
 			description,
-			test: () => {
+			test: (state) => {
 				try {
-					return test(_expect);
+					return test(_expect, state);
 				} catch (e) {
 					// If errors are thrown, reject them
 					return Promise.reject(e);
@@ -85,7 +88,7 @@ class Gunner {
 				results.passing = success.length;
 				const successPercent = Math.floor(success.length/results.length * 100);
 				log(
-					`\n${success.length} tests passed of ${results.length}`,
+					chalk`\n{green ${success.length}} tests passed of ${results.length}`,
 					`[${successPercent}% success]\n`
 				);
 				results.forEach(r => {
@@ -93,7 +96,7 @@ class Gunner {
 						? `\n    Traceback:\n    ${stringify(r.error)}`
 						: '';
 
-					log(`${r.result === 'pass' ? '✅' : '❌'} ::`,
+					log(`${r.result === 'pass' ? chalk`{green ✅}` : chalk`{red ❌}`} ::`,
 						`${r.description}`,
 						`${trace}`);
 				});
@@ -115,3 +118,5 @@ class Gunner {
 
 module.exports = Gunner;
 module.exports.expect = _expect;
+module.exports.Start = symbols.Start;
+module.exports.End = symbols.End;

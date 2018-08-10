@@ -1,6 +1,16 @@
-const Gunner = require('./gunner');
+/**
+ * This file contains random tests
+ * used during development
+ */
+
+const Gunner = require('./index.js');
 const gunner = new Gunner({ name: 'sample tests' });
 const a = 1;
+
+gunner.before(Gunner.Start, () => console.log('Started tests!'));
+gunner.before(Gunner.End, () => console.log('Ended tests!'));
+let runCount = 1;
+gunner.before('*', () => console.log(`Running test ${runCount++}`));
 
 gunner.test('should automatically pass', expect => expect().done());
 gunner.test(`should be equal`, expect => expect(1).equal(1));
@@ -16,6 +26,16 @@ gunner.test('should be a Promise (rejected)', expect =>
 gunner.test('should resolve to 5', expect =>
 	expect(Promise.resolve(5)).resolvesTo(5));
 
+gunner.before(
+	'file must have hello as content',
+	() => console.log('>> starting test! file must have hello as content'),
+);
+
+gunner.after(
+	'file must have hello as content',
+	() => console.log('>> finished test! file must have hello as content'),
+);
+
 gunner.test('file must have hello as content', async expect => {
 	const { readFile } = require('fs').promises;
 	const file = await readFile('./hello.txt', { encoding: 'utf8' });
@@ -24,6 +44,12 @@ gunner.test('file must have hello as content', async expect => {
 		expect(file.length).equal(5),
 	];
 });
+
+gunner.test('(should fail) Value is not a Promise', expect =>
+	expect(5).isPromise());
+
+gunner.test('(should fail) Error is not a Promise', expect =>
+	expect(flamethrower()).isPromise());
 
 gunner.test(`(should fail) objects aren't deeply equal`, expect => expect({a : 1}).deepEqual({ a: 2 }));
 
@@ -52,7 +78,9 @@ gunner.test('(should fail) should catch error', expect => {
 });
 
 gunner.test('(should fail) should not resolve to 5', expect =>
-	expect(Promise.resolve({})).resolvesTo(5));
+	expect(Promise.resolve()).resolvesTo(5));
 
+const trace = process.argv.slice(2).indexOf('--trace') !== -1;
+const log = process.argv.slice(2).indexOf('--log') !== -1;
 
-gunner.run({ trace: true});
+gunner.run({ trace, log });
