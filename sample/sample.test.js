@@ -3,7 +3,7 @@
  * used during development
  */
 
-const Gunner = require('./index.js');
+const Gunner = require('../index.js');
 const gunner = new Gunner({ name: 'sample tests' });
 const a = 1;
 
@@ -38,7 +38,7 @@ gunner.after(
 
 gunner.test('file must have hello as content', async expect => {
 	const { readFile } = require('fs').promises;
-	const file = await readFile('./hello.txt', { encoding: 'utf8' });
+	const file = await readFile(__dirname + '/hello.txt', { encoding: 'utf8' });
 	return [
 		expect(file).equal('hello'),
 		expect(file.length).equal(5),
