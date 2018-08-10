@@ -57,7 +57,7 @@ Creates a new Gunner instance.
 const gunner = new Gunner(options);
 ```
 
-[`INDEX`](#index)
+[`INDEX`](#documentation-index)
 
 ### Gunner#test (title, implementation)
 
@@ -104,7 +104,7 @@ gunner.test('asynchronous test', async expect => {
 })
 ```
 
-[`INDEX`](#index)
+[`INDEX`](#documentation-index)
 
 ### Gunner#before (title, implementation)
 
@@ -141,7 +141,7 @@ gunner.test('insert to db should not error', expect => {
 });
 ```
 
-[`INDEX`](#index)
+[`INDEX`](#documentation-index)
 
 ### Gunner#after (title, implementation)
 
@@ -170,7 +170,7 @@ gunner.after('insert to db should not error', () => {
 });
 ```
 
-[`INDEX`](#index)
+[`INDEX`](#documentation-index)
 
 ### Gunner#run (options)
 
@@ -188,7 +188,7 @@ const options = { logs: true, trace: true };
 gunner.run(options);
 ```
 
-[`INDEX`](#index)
+[`INDEX`](#documentation-index)
 
 ### State
 
@@ -246,7 +246,7 @@ gunner.after('test user should exist in db', state => {
 });
 ```
 
-[`INDEX`](#index)
+[`INDEX`](#documentation-index)
 
 ## Credits
 
