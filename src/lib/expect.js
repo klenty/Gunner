@@ -46,9 +46,13 @@ const expect = thing => {
 			(a, b, c) => a[b] === c,
 			(a, b, c) => `Pair <${b}, ${c}> does not exist in ${stringify(a)}`,
 		)(thing),
+		hasPairDeepEquals : expectPromise(
+			(a, b, c) => isEq(a[b], c),
+			(a, b, c) => `Pair <${b}, ${c}> does not exist in ${stringify(a)}`,
+		)(thing),
 		resolvesTo : expectPromise(
 			(a, b) => isPromise(a)
-				? a.then(x => x === b ? Promise.resolve() : Promise.reject())
+				? a.then(x => isEq(x, b) ? Promise.resolve() : Promise.reject())
 				: Promise.reject(`${a} was not a Promise`),
 			(a, b) => `${a} does not resolve to ${b}`,
 		)(thing),

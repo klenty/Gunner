@@ -50,8 +50,15 @@ const runTests = instance => {
 			return [
 				state,
 				toTest
-				.then(() => ({ description: each.description, result: constants.pass }))
-				.catch(e => ({ description: each.description, result: constants.fail, error: e })),
+				.then(() => ({
+					description: each.description,
+					result: constants.pass
+				}))
+				.catch(e => ({
+					description: each.description,
+					result: constants.fail,
+					error: e
+				})),
 			];
 
 		})

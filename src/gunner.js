@@ -80,15 +80,22 @@ class Gunner {
 	}
 
 	run (options = {}) {
-		const shouldLog = (hasProp(options)('log') && options.log) || !(hasProp(options)('log'));
+		const shouldLog = (
+			(hasProp(options)('log')
+				&& options.log)
+			|| !(hasProp(options)('log'))
+		);
 		return _runTests(this)
 		.then(results => {
 			if (shouldLog) {
 				const success = results.filter(r => r.result === 'pass');
 				results.passing = success.length;
-				const successPercent = Math.floor(success.length/results.length * 100);
+				const successPercent = Math.floor(
+					success.length/results.length * 100
+				);
 				log(
-					chalk`\n{green ${success.length}} tests passed of ${results.length}`,
+					chalk`\n{green ${success.length}}`,
+					`tests passed of ${results.length}`,
 					`[${successPercent}% success]\n`
 				);
 				results.forEach(r => {
@@ -96,9 +103,13 @@ class Gunner {
 						? `\n    Traceback:\n    ${stringify(r.error)}`
 						: '';
 
-					log(`${r.result === 'pass' ? chalk`{green ✅}` : chalk`{red ❌}`} ::`,
+					log(
+						`${r.result === 'pass'
+							? chalk`{green ✅}`
+							: chalk`{red ❌}`} ::`,
 						`${r.description}`,
-						`${trace}`);
+						`${trace}`
+					);
 				});
 			}
 
