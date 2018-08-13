@@ -13,13 +13,16 @@
 Create a new `Gunner` instance and simply write your tests. The assertion methods are passed in as the callback as an `expect` object to the test function.
 
 ```JavaScript
+// Create new instance
 const gunner = new Gunner();
 
+// Define tests
 gunner.test('arrays are equal', expect => {
 	return expect([1, 2,]).deepEqual([1 ,2]);
 });
 
-gunner.run(); // starts the runner
+// Starts the runner
+gunner.run();
 ```
 
 ## Documentation
@@ -41,4 +44,4 @@ gunner.run(); // starts the runner
 
 ## Credits
 
-`Gunner` was built at [Klenty](https://klenty.com), a sales automation startup, by Muthu Kumar [(@MKRhere)](https://github.com/MKRhere).
+`Gunner` was built by Muthu Kumar [(@MKRhere)](https://github.com/MKRhere) at [Klenty](https://klenty.com), a sales automation startup.
