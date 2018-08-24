@@ -45,6 +45,9 @@ gunner.test('file must have hello as content', async expect => {
 	];
 });
 
+gunner.test('(should fail) Should automatically fail', expect =>
+	expect().fail());
+
 gunner.test('(should fail) Value is not a Promise', expect =>
 	expect(5).isPromise());
 

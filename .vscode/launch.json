@@ -7,8 +7,12 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
-			"program": "${workspaceFolder}/sample/sample.test.js"
+			"name": "Debug Gunner",
+			"program": "${workspaceFolder}/sample/sample.test.js",
+			"args": [
+				"--log",
+				"--trace",
+			],
 		}
 	]
 }

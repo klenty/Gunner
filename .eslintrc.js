@@ -9,22 +9,24 @@ module.exports = {
 	},
 	"extends": "eslint:recommended",
 	"rules": {
+		"no-global-assign": "off",
+		"no-console": "off",
+		"no-undef": "off",
 		"no-nested-ternary": "warn",
 		"no-self-compare": "error",
 		"no-trailing-spaces": "error",
 		"no-unmodified-loop-condition": "error",
 		"no-unneeded-ternary": "error",
-		"no-console": "off",
-		"no-undef": "off",
+		"no-undef": "error",
 		'comma-dangle': [ 'error', 'only-multiline' ],
-		"indent": [
-			"error",
-			"tab",
-			{ MemberExpression: 0, }
-		],
 		"linebreak-style": [ "error", "unix" ],
 		"semi": [ "error", "always" ],
 		"eqeqeq": [ "error", "always", {"null": "ignore"} ],
-		"no-global-assign": 0,
+		"indent": [ "error", "tab",
+			{
+				MemberExpression: 0,
+				SwitchCase: 1,
+			}
+		],
 	}
 };
