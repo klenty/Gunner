@@ -1,9 +1,16 @@
 const { isPromise } = require('../util');
 
-const _assertPromise = (bool, assertion) => {
+const createRejectionStatement = (statement, ...args) =>
+	Promise.reject(statement ? statement(...args) : '');
+
+const _assertPromise = (bool, statementTuple) => {
+	const [ statement, ...args ] = statementTuple;
 	if(isPromise(bool))
-		return bool.catch(() => Promise.reject(assertion));
-	return bool ? Promise.resolve() : Promise.reject(assertion);
+		return bool.catch(() =>
+			createRejectionStatement(statement, ...args));
+	return bool
+		? Promise.resolve()
+		: createRejectionStatement(statement, ...args);
 };
 
 module.exports = _assertPromise;
