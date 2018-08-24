@@ -1,6 +1,6 @@
 'use strict';
 
-const { log } = console;
+const { EOL } = require('os');
 const chalk = require('chalk');
 
 Promise = require('bluebird');
@@ -8,8 +8,9 @@ Promise.object = require('@codefeathers/promise.object');
 
 const _runTests = require('./lib/runTests');
 const _expect = require('./lib/expect');
+const logger = require('./lib/logger');
 
-const { stringify, hasProp } = require('./util');
+const { hasProp } = require('./util');
 const symbols = require('./util/symbols');
 
 class Gunner {
@@ -80,47 +81,39 @@ class Gunner {
 	}
 
 	run (options = {}) {
-		const shouldLog = (
-			(hasProp(options)('log')
-				&& options.log)
-			|| !(hasProp(options)('log'))
-		);
-		return _runTests(this)
+		options.log = (options || {})['log'] || !(hasProp(options)('log'));
+		return _runTests(this, options)
 		.then(results => {
-			if (shouldLog) {
-				const success = results.filter(r => r.result === 'pass');
-				results.passing = success.length;
-				const successPercent = Math.floor(
-					success.length/results.length * 100
-				);
-				log(
-					chalk`\n{green ${success.length}}`,
-					`tests passed of ${results.length}`,
-					`[${successPercent}% success]\n`
-				);
-				results.forEach(r => {
-					const trace = (options.trace && r.error)
-						? `\n    Traceback:\n    ${stringify(r.error)}`
-						: '';
+			const success = results.filter(r => r.result === 'pass');
+			const successPercent = Math.floor(
+				success.length/results.length * 100
+			);
 
-					log(
-						`${r.result === 'pass'
-							? chalk`{green ✅}`
-							: chalk`{red ❌}`} ::`,
-						`${r.description}`,
-						`${trace}`
-					);
-				});
-			}
+			const beforeAfterLine =
+				successPercent === 100
+					? chalk`{green ------------------------------------}`
+					: chalk`{red ------------------------------------}`;
+
+			const log = logger.create(options);
+			log(
+				EOL,
+				beforeAfterLine,
+				EOL, EOL,
+				chalk`{green  ${success.length}}`,
+				`tests passed of ${results.length}`,
+				`[${successPercent}% success]`,
+				EOL, EOL,
+				beforeAfterLine
+			);
+
+			if((successPercent !== 100) && typeof process !== 'undefined')
+				process.exitCode = 1;
 
 			return results;
 		})
 		.then(results => {
-			if (options.exit) {
-				if(results.passing < results.length)
-					process.exit(1);
-				process.exit(0);
-			}
+			if (options.exit && typeof process !== 'undefined')
+				process.exit();
 			return results;
 		});
 	}

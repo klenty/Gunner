@@ -1,12 +1,40 @@
 'use strict';
 
-const { isPromise } = require('../util');
+const chalk = require('chalk');
+
+const logger = require('./logger');
+const { isPromise, taggedStringify: _ } = require('../util');
 const constants = require('../util/symbols');
 
-const runTests = instance => {
+const snipStack = e => {
+
+	if (e.stack)
+		e.stack = e.stack
+		.split('\n')
+		.reduceRight(
+			(acc, x) =>
+				/* eslint-disable-next-line */
+				acc.done
+					? acc.cur
+					: x.match(/at Object\.test.*\/src\/gunner\.js/)
+						? { cur: x, done: true }
+						: { cur: [x, acc.cur].join('\n') },
+			{ cur: '' })
+		.cur.trim();
+
+	return e;
+
+};
+
+const runTests = (instance, options) => {
+
+	const log = logger.create(options);
 
 	const beforeAll = () => Promise.map(
-		instance.__hooks__.before[constants.Start] || [],
+		[
+			...instance.__hooks__.before[constants.Start] || [],
+			...instance.__hooks__.after[constants.Start] || [],
+		],
 		hook => hook.run(),
 	);
 
@@ -50,15 +78,32 @@ const runTests = instance => {
 			return [
 				state,
 				toTest
-				.then(() => ({
-					description: each.description,
-					result: constants.pass
-				}))
-				.catch(e => ({
-					description: each.description,
-					result: constants.fail,
-					error: e
-				})),
+				.then(() => {
+					log(
+						`${chalk`{green ✅}`} :: `,
+						`${each.description}`
+					);
+					return {
+						description: each.description,
+						result: constants.pass
+					};
+				})
+				.catch(e => {
+					const error = (e && e.stack) ? snipStack(e) : e;
+					const trace = (options.trace && error)
+						? `\n    Traceback:\n    ` + _`${error}`
+						: '';
+					log(
+						`${chalk`{red ❌}`} :: `,
+						`${each.description}`,
+						`${trace}`
+					);
+					return {
+						description: each.description,
+						result: constants.fail,
+						error,
+					};
+				}),
 			];
 
 		})
@@ -67,7 +112,10 @@ const runTests = instance => {
 	});
 
 	const afterAll = state => Promise.mapSeries(
-		instance.__hooks__.before[constants.End] || [],
+		[
+			...(instance.__hooks__.before[constants.End] || []),
+			...(instance.__hooks__.after[constants.End] || []),
+		],
 		hook => hook.run(state, state['@results']),
 	);
 
