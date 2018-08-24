@@ -1,6 +1,4 @@
-const isEq = require('@codefeathers/iseq');
-
-const { liftPromise, stringify, isPromise } = require('../util');
+const { liftPromise } = require('../util');
 const _assertPromise = require('./assertPromise');
 
 const expectPromise = (pred, statement, options = {}) =>
@@ -9,7 +7,7 @@ const expectPromise = (pred, statement, options = {}) =>
 			liftPromise(
 				resolvedValue => _assertPromise(
 					pred(toTest, ...testValues),
-					statement(resolvedValue, ...testValues),
+					[ statement, resolvedValue, ...testValues ],
 				),
 				toTest,
 			)
@@ -17,54 +15,31 @@ const expectPromise = (pred, statement, options = {}) =>
 				options.shouldCatch
 					? _assertPromise(
 						pred(toTest, ...testValues),
-						statement(rejectedValue, ...testValues),
+						[ statement, rejectedValue, ...testValues ],
 					)
 					: Promise.reject(rejectedValue)
 			);
 
-const expect = thing => {
+const library = require('./assertionsLibrary');
 
-	return ({
-		done : () => Promise.resolve(),
-		equal : expectPromise(
-			(a, b) => a === b,
-			(a, b) => `${a} is not equal to ${b}`,
-		)(thing),
-		deepEqual : expectPromise(
-			(a, b) => isEq(a, b),
-			(a, b) => `${stringify(a)} is not deeply equal to ${stringify(b)}`,
-		)(thing),
-		isTrue : expectPromise(
-			a => a === true,
-			a => `${a} is not true`,
-		)(thing),
-		hasProp : expectPromise(
-			(a, b) => b in a,
-			(a, b) => `Property ${b} does not exist in ${stringify(a)}`,
-		)(thing),
-		hasPair : expectPromise(
-			(a, b, c) => a[b] === c,
-			(a, b, c) => `Pair <${b}, ${c}> does not exist in ${stringify(a)}`,
-		)(thing),
-		hasPairDeepEquals : expectPromise(
-			(a, b, c) => isEq(a[b], c),
-			(a, b, c) => `Pair <${b}, ${c}> does not exist in ${stringify(a)}`,
-		)(thing),
-		resolvesTo : expectPromise(
-			(a, b) => isPromise(a)
-				? a.then(x => isEq(x, b) ? Promise.resolve() : Promise.reject())
-				: Promise.reject(`${a} was not a Promise`),
-			(a, b) => `${a} does not resolve to ${b}`,
-		)(thing),
-		isPromise : expectPromise(
-			a => isPromise(a)
-				? a.then(() => Promise.resolve()).catch(() => Promise.resolve())
-				: Promise.reject(),
-			a => `${a} is not a Promise`,
-			{ shouldCatch: true },
-		)(thing),
+const expects = Object.keys(library).reduce((acc, e) => {
+	const [ pred, statement, options ] = library[e];
+
+	acc[e] = expectPromise(
+		pred,
+		statement,
+		options,
+	);
+
+	return acc;
+
+}, {});
+
+const expect = thing =>
+	new Proxy({}, {
+		get: function (obj, prop) {
+			return expects[prop](thing);
+		},
 	});
-
-};
 
 module.exports = expect;
