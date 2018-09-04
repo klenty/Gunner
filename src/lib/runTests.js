@@ -1,5 +1,7 @@
 'use strict';
 
+const Promise = require('bluebird');
+Promise.object = require('@codefeathers/promise.object');
 const chalk = require('chalk');
 
 const logger = require('./logger');
@@ -26,38 +28,56 @@ const snipStack = e => {
 
 };
 
+const unitReducer =
+	(units = [], stateMark) =>
+		(state = {}) =>
+			units.reduce(
+				(accumulator, unit) =>
+					accumulator
+					.then(thisState =>
+						Promise.resolve(
+							unit.run({ ...state, [stateMark]: thisState })
+						)
+						.then(newState =>
+							[ ...thisState, newState ])),
+				Promise.resolve(state[stateMark] || []),
+			);
+
 const runTests = (instance, options) => {
 
 	const log = logger.create(options);
 
-	const beforeAll = () => Promise.map(
-		[
-			...instance.__hooks__.before[constants.Start] || [],
-			...instance.__hooks__.after[constants.Start] || [],
-		],
-		hook => hook.run(),
-	);
+	const beforeAll = () =>
+		unitReducer(
+			[
+				...(instance.__hooks__.before[constants.Start] || []),
+				...(instance.__hooks__.after[constants.Start] || []),
+			],
+			'@start',
+		)();
 
-	const beforeEvery = state => Promise.mapSeries(
-		instance.__hooks__.before['*'] || [],
-		hook => hook.run(state),
-	);
+	const beforeEvery = state =>
+		unitReducer(
+			instance.__hooks__.before['*'],
+			'@every',
+		)(state);
 
 	const runner = state => Promise.mapSeries(instance.__tests__, each => {
 
-		const beforeThis = state => Promise.mapSeries(
-			instance.__hooks__.before[each.description] || [],
-			hook => hook.run(state),
-		);
+		const beforeThis =
+			unitReducer(
+				instance.__hooks__.before[each.description],
+				'@this'
+			);
 
-		const afterThis = state => Promise.mapSeries(
-			instance.__hooks__.after[each.description] || [],
-			hook => hook.run(state),
-		);
+		const afterThis =
+			unitReducer(
+				instance.__hooks__.after[each.description],
+				'@afterThis'
+			);
 
-		return beforeEvery(state)
-		.then(newState => ({ ...state, '@every': newState }))
-		.then(state => Promise.object({ ...state, '@this': beforeThis() }))
+		return Promise.object({ ...state, '@every': beforeEvery(state) })
+		.then(state => Promise.object({ ...state, '@this': beforeThis(state) }))
 		.then(state => {
 
 			const pred = each.test(state);
@@ -75,7 +95,7 @@ const runTests = (instance, options) => {
 				? Promise.all(pred)
 				: pred.then(x => Array.isArray(x) ? Promise.all(x) : x);
 
-			return [
+			return ([
 				state,
 				toTest
 				.then(() => {
@@ -104,20 +124,21 @@ const runTests = (instance, options) => {
 						error,
 					};
 				}),
-			];
+			]);
 
 		})
-		.spread((state, result) => afterThis(state).then(() => result));
+		.then(([state, result]) => afterThis(state).then(() => result));
 
 	});
 
-	const afterAll = state => Promise.mapSeries(
-		[
-			...(instance.__hooks__.before[constants.End] || []),
-			...(instance.__hooks__.after[constants.End] || []),
-		],
-		hook => hook.run(state, state['@results']),
-	);
+	const afterAll =
+		unitReducer(
+			[
+				...(instance.__hooks__.before[constants.End] || []),
+				...(instance.__hooks__.after[constants.End] || []),
+			],
+			'@after-all',
+		);
 
 	return Promise.object({ '@start': beforeAll() })
 	.then(state => Promise.object({ ...state, '@results': runner(state)}))
