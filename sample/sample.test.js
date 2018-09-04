@@ -7,10 +7,10 @@ const Gunner = require('../index.js');
 const gunner = new Gunner({ name: 'sample tests' });
 const a = 1;
 
-gunner.before(Gunner.Start, () => console.log('Started tests!'));
-gunner.before(Gunner.End, () => console.log('Ended tests!'));
-let runCount = 1;
-gunner.before('*', () => console.log(`Running test ${runCount++}`));
+// gunner.before(Gunner.Start, () => console.log('Started tests!'));
+// gunner.before(Gunner.End, () => console.log('Ended tests!'));
+// let runCount = 1;
+// gunner.before('*', () => console.log(`Running test ${runCount++}`));
 
 gunner.test('should automatically pass', expect => expect().done());
 gunner.test(`should be equal`, expect => expect(1).equal(1));
@@ -23,18 +23,27 @@ gunner.test('should be a Promise (resolved)', expect =>
 gunner.test('should be a Promise (rejected)', expect =>
 	expect(Promise.reject()).isPromise());
 
+gunner.test('wait and resolve', () => {
+	return new Promise(r => {
+		setTimeout(
+			() => r('ok'),
+			500
+		);
+	});
+});
+
 gunner.test('should resolve to 5', expect =>
 	expect(Promise.resolve(5)).resolvesTo(5));
 
-gunner.before(
-	'file must have hello as content',
-	() => console.log('>> starting test! file must have hello as content'),
-);
+// gunner.before(
+// 	'file must have hello as content',
+// 	() => console.log('>> starting test! file must have hello as content'),
+// );
 
-gunner.after(
-	'file must have hello as content',
-	() => console.log('>> finished test! file must have hello as content'),
-);
+// gunner.after(
+// 	'file must have hello as content',
+// 	() => console.log('>> finished test! file must have hello as content'),
+// );
 
 gunner.test('file must have hello as content', async expect => {
 	const { readFile } = require('fs').promises;
