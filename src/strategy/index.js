@@ -1,5 +1,7 @@
 const Promise = require('bluebird');
+
 const requireDeep = require('../util/requireDeep');
+const Runner = require('../runner');
 
 class Strategy {
 
@@ -14,6 +16,7 @@ class Strategy {
 		this.__resourceCreators = resources;
 		this.__runTimeOptions = runTimeOptions;
 		this.compiler = compiler;
+		this.__await__ = [];
 
 		this.__gunnerInstances = [];
 		this.resources = {};
@@ -37,11 +40,9 @@ class Strategy {
 	 * @param {string|Array<string>=} options.pattern
 	 */
 	fetchSpecs (options) {
-		this.__gunnerInstances =
-			Promise.map(
-				requireDeep(options),
-				this.compiler(this),
-			);
+		this.__await__.push(Promise.map(requireDeep(options), each => {
+			this.__gunnerInstances = this.compiler(this)(each);
+		}));
 		return this;
 	}
 
@@ -59,8 +60,10 @@ class Strategy {
 	 * @param {Object=} options
 	 */
 	run (options) {
-		return Promise.map(this.__gunnerInstances, instance =>
-			instance.run(options || this.__runTimeOptions));
+		const runOptions = options || this.__runTimeOptions;
+
+		return Promise.all(this.__await__).then(() => (
+			Runner(this.__gunnerInstances)(runOptions)));
 	}
 
 }

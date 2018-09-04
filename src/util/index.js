@@ -7,6 +7,9 @@ const stringify = obj =>
 		? (obj.stack || _stringify(obj))
 		: obj;
 
+const deepFlatten = arr => [].concat(
+	...arr.map(v => (Array.isArray(v) ? deepFlatten(v) : v)));
+
 /* Returns true if a promise is passed */
 const isPromise = prom => prom && (typeof prom.then === 'function');
 
@@ -39,6 +42,9 @@ module.exports = {
 
 	/* Flattens an array of arrays to an array */
 	flatten : arrData => [].concat.apply([], arrData),
+
+	/* Deep flattens arrays */
+	deepFlatten,
 
 	/* Maps a function over an array */
 	map : fn => x => x.map(fn),
@@ -82,5 +88,8 @@ module.exports = {
 
 	/* Check if object has given property */
 	hasProp : obj => prop => prop in obj,
+
+	/* Fetches last element from list */
+	last : arr => arr[arr.length - 1],
 
 };

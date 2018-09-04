@@ -10,6 +10,11 @@ module.exports.fail = [
 	() => false,
 	() => null,
 ];
+module.exports.exists =
+	[
+		val => typeof val !== 'undefined',
+		() => `Value is undefined`
+	];
 module.exports.isArray =
 	[
 		val => Array.isArray(val),

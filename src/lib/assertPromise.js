@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const { isPromise } = require('../util');
 
 const createRejectionStatement = (statement, ...args) =>

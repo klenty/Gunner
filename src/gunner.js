@@ -3,14 +3,13 @@
 const { EOL } = require('os');
 const chalk = require('chalk');
 
-Promise = require('bluebird');
+const Promise = require('bluebird');
 Promise.object = require('@codefeathers/promise.object');
 
 const _runTests = require('./lib/runTests');
 const _expect = require('./lib/expect');
 const logger = require('./lib/logger');
 
-const { hasProp } = require('./util');
 const symbols = require('./util/symbols');
 
 class Gunner {
@@ -19,10 +18,12 @@ class Gunner {
 		this.__hooks__ = {
 			before: {
 				[symbols.Start]: [],
-				[symbols.Stop]: [],
+				[symbols.End]: [],
 				'*': [],
 			},
 			after: {
+				[symbols.Start]: [],
+				[symbols.End]: [],
 				'*': [],
 			},
 		};
@@ -41,7 +42,7 @@ class Gunner {
 
 		this.__tests__.push({
 			description,
-			test: (state) => {
+			test: state => {
 				try {
 					return test(_expect, state);
 				} catch (e) {
@@ -81,7 +82,6 @@ class Gunner {
 	}
 
 	run (options = {}) {
-		options.log = (options || {})['log'] || !(hasProp(options)('log'));
 		return _runTests(this, options)
 		.then(results => {
 			const success = results.filter(r => r.result === 'pass');

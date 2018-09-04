@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const { liftPromise } = require('../util');
 const _assertPromise = require('./assertPromise');
 
