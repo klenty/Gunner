@@ -1,4 +1,4 @@
-const { isPromise } = require('../../util');
+const { isPromise } = require('../util');
 
 const caller = (test, state) => {
 

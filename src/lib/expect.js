@@ -58,7 +58,5 @@ const expect = (thing, args) =>
 
 const expectMany = Promise.all.bind(Promise);
 
-expect(5).notEquals(5).then(console.log).catch(console.log);
-
 module.exports.expect = expect;
 module.exports.expectMany = expectMany;

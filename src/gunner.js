@@ -1,7 +1,7 @@
 'use strict';
 
 const { arrayOrPush } = require('./util');
-const caller = require('./lib/unit/caller');
+const caller = require('./lib/caller');
 
 const testrunner = require('./lib/testrunner');
 const { expect, expectMany } = require('./lib/expect');
