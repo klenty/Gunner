@@ -1,6 +1,8 @@
 'use strict';
 
 const { liftPromise, lowerCaseFirstLetter } = require('../util');
+
+const library = require('./assertionsLibrary');
 const assertPromise = require('./assertPromise');
 
 const expectPromise = (pred, statement, options = {}) =>
@@ -18,11 +20,10 @@ const expectPromise = (pred, statement, options = {}) =>
 					? assertPromise(
 						pred(toTest, ...testValues),
 						[ statement, rejectedValue, ...testValues ],
+						{ skipStatement: rejectedValue },
 					)
 					: Promise.reject(rejectedValue)
 			);
-
-const library = require('./assertionsLibrary');
 
 const expects = Object.keys(library).reduce((acc, e) => {
 
