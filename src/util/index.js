@@ -35,10 +35,16 @@ module.exports = {
 		path =>
 			path.reduce((result, segment) => result && result[segment], obj),
 
+	/* Picks a key from an object */
+	pick : key => obj => obj[key],
+
 	/* Pipe a value or promise through any number of unary functions */
 	pipe: (...fns) =>
 		arg => fns.reduce((acc, fn) =>
 			liftPromise(fn, acc), arg),
+
+	/* Reduces an array */
+	reduce : (fn, def) => arr => arr.reduce(fn, def),
 
 	/* Flattens an array of arrays to an array */
 	flatten : arrData => [].concat.apply([], arrData),
@@ -91,5 +97,27 @@ module.exports = {
 
 	/* Fetches last element from list */
 	last : arr => arr[arr.length - 1],
+
+	/* Uppercases first letter of word */
+	upperCaseFirstLetter : word =>
+		word[0].toUpperCase()
+		+ word.slice(1),
+
+	/* Lowercases first letter of word */
+	lowerCaseFirstLetter : word =>
+		word[0].toLowerCase()
+		+ word.slice(1),
+
+	/* Creates an array or pushes to an existing one */
+	arrayOrPush : (obj, key, item) =>
+		Array.isArray(obj[key])
+			? obj[key].push(item)
+			: obj[key] = [item],
+
+	/* Assigns to key or creates a new object */
+	assignToObject : (obj, path) => (key, value) =>
+		isObject(obj[path])
+			? obj[path][key] = value
+			: obj[path] = { [key]: value },
 
 };

@@ -45,13 +45,13 @@ const expect = (thing, args) =>
 		get: function (obj, prop) {
 			const toCheck = args ? thing(...args) : thing;
 			if (prop.slice(0, 3) === 'not')
-				return check =>
+				return (...check) =>
 					negateP(
 						expects[
 						lowerCaseFirstLetter(prop.slice(3))
-						](toCheck)(check)
+						](toCheck)(...check)
 					);
-			return check => expects[prop](toCheck)(check);
+			return (...check) => expects[prop](toCheck)(...check);
 		},
 	});
 
