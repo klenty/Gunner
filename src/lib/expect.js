@@ -1,12 +1,13 @@
-const Promise = require('bluebird');
-const { liftPromise } = require('../util');
-const _assertPromise = require('./assertPromise');
+'use strict';
+
+const { liftPromise, lowerCaseFirstLetter } = require('../util');
+const assertPromise = require('./assertPromise');
 
 const expectPromise = (pred, statement, options = {}) =>
 	toTest =>
 		(...testValues) =>
 			liftPromise(
-				resolvedValue => _assertPromise(
+				resolvedValue => assertPromise(
 					pred(toTest, ...testValues),
 					[ statement, resolvedValue, ...testValues ],
 				),
@@ -14,7 +15,7 @@ const expectPromise = (pred, statement, options = {}) =>
 			)
 			.catch(rejectedValue =>
 				options.shouldCatch
-					? _assertPromise(
+					? assertPromise(
 						pred(toTest, ...testValues),
 						[ statement, rejectedValue, ...testValues ],
 					)
@@ -36,11 +37,27 @@ const expects = Object.keys(library).reduce((acc, e) => {
 
 }, {});
 
-const expect = thing =>
+const negateP = prom =>
+	prom.then(Promise.reject, Promise.resolve);
+
+const expect = (thing, args) =>
 	new Proxy({}, {
 		get: function (obj, prop) {
-			return expects[prop](thing);
+			const toCheck = args ? thing(...args) : thing;
+			if (prop.slice(0, 3) === 'not')
+				return check =>
+					negateP(
+						expects[
+						lowerCaseFirstLetter(prop.slice(3))
+						](toCheck)(check)
+					);
+			return check => expects[prop](toCheck)(check);
 		},
 	});
 
-module.exports = expect;
+const expectMany = Promise.all.bind(Promise);
+
+expect(5).notEquals(5).then(console.log).catch(console.log);
+
+module.exports.expect = expect;
+module.exports.expectMany = expectMany;
