@@ -31,7 +31,7 @@ module.exports = {
 	liftPromise,
 
 	/* Returns the element found at the given path or undefined */
-	path: obj =>
+	path : obj =>
 		path =>
 			path.reduce((result, segment) => result && result[segment], obj),
 
@@ -39,7 +39,7 @@ module.exports = {
 	pick : key => obj => obj[key],
 
 	/* Pipe a value or promise through any number of unary functions */
-	pipe: (...fns) =>
+	pipe : (...fns) =>
 		arg => fns.reduce((acc, fn) =>
 			liftPromise(fn, acc), arg),
 
@@ -71,7 +71,7 @@ module.exports = {
 	promiseAll : x => Promise.all(x),
 
 	/* Pass partial arguments and return a function that accepts the rest */
-	partial: (fn, ...args) => (...rest) => fn(...args, ...rest),
+	partial : (fn, ...args) => (...rest) => fn(...args, ...rest),
 
 	/* Item is in collection */
 	isIn : (collection, item) => collection.indexOf(item) !== -1,
@@ -85,7 +85,7 @@ module.exports = {
 	stringify,
 
 	/* Tagged Stringify */
-	taggedStringify: (strings, ...expr) => strings.reduce((acc, curr, i) =>
+	taggedStringify : (strings, ...expr) => strings.reduce((acc, curr, i) =>
 		acc + curr + (stringify(expr[i]) || ''), ''),
 
 	/* Short circuits with given value on pred. Else calls function */
