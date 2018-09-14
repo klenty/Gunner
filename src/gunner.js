@@ -1,119 +1,82 @@
 'use strict';
 
-const { EOL } = require('os');
-const chalk = require('chalk');
+const { arrayOrPush } = require('./util');
+const caller = require('./lib/caller');
 
-const Promise = require('bluebird');
-Promise.object = require('@codefeathers/promise.object');
-
-const _runTests = require('./lib/runTests');
-const _expect = require('./lib/expect');
-const logger = require('./lib/logger');
+const testrunner = require('./lib/testrunner');
+const { expect, expectMany } = require('./lib/expect');
 
 const symbols = require('./util/symbols');
 
 class Gunner {
 
-	constructor (options = {}) {
-		this.__hooks__ = {
-			before: {
+	constructor (name) {
+		this.name = name;
+		this.__suite__ = {
+			tests: [],
+			beforeHooks: {
 				[symbols.Start]: [],
 				[symbols.End]: [],
 				'*': [],
 			},
-			after: {
+			afterHooks: {
 				[symbols.Start]: [],
 				[symbols.End]: [],
 				'*': [],
-			},
+			}
 		};
-		this.__state__ = [];
-		this.__tests__ = [];
-		this.name = options.name;
 	}
 
 	test (description, test) {
 		const existing = (
-			this.__tests__
+			this.__suite__.tests
 			.find(x => x.description === description)
 		);
 		if (existing)
 			throw new Error(`Test '${description}' already exists!`);
 
-		this.__tests__.push({
+		const unit = {
 			description,
-			test: state => {
-				try {
-					return test(_expect, state);
-				} catch (e) {
-					// If errors are thrown, reject them
-					return Promise.reject(e);
-				}
-			},
-		});
-
+			type: 'test',
+			run: state => caller(test, state),
+		};
+		this.__suite__.tests.push(unit);
 		return this;
 	}
 
-	before (description, run) {
-		const hook = {
+	before (description, run, label) {
+		const unit = {
 			description,
-			run,
+			label,
+			type: 'hook',
+			run: state => caller(run, state),
 		};
-
-		this.__hooks__.before[description]
-			? this.__hooks__.before[description].push(hook)
-			: this.__hooks__.before[description] = [ hook ];
-
+		arrayOrPush(this.__suite__.beforeHooks, description, unit);
 		return this;
 	}
 
-	after (description, run) {
-		const hook = {
+	after (description, run, label) {
+		const unit = {
 			description,
-			run,
+			label,
+			type: 'hook',
+			run: state => caller(run, state),
 		};
-
-		this.__hooks__.after[description]
-			? this.__hooks__.after[description].push(hook)
-			: this.__hooks__.after[description] = [ hook ];
-
+		arrayOrPush(this.__suite__.afterHooks, description, unit);
 		return this;
 	}
 
 	run (options = {}) {
-		return _runTests(this, options)
+		return testrunner(this, options)
 		.then(results => {
-			const success = results.filter(r => r.result === 'pass');
+			const success = results.filter(r => r.status === 'ok');
 			const successPercent = Math.floor(
 				success.length/results.length * 100
-			);
-
-			const beforeAfterLine =
-				successPercent === 100
-					? chalk`{green ------------------------------------}`
-					: chalk`{red ------------------------------------}`;
-
-			const log = logger.create(options);
-			log(
-				EOL,
-				beforeAfterLine,
-				EOL, EOL,
-				chalk`{green  ${success.length}}`,
-				`tests passed of ${results.length}`,
-				`[${successPercent}% success]`,
-				EOL, EOL,
-				beforeAfterLine
 			);
 
 			if((successPercent !== 100) && typeof process !== 'undefined')
 				process.exitCode = 1;
 
-			return results;
-		})
-		.then(results => {
-			if (options.exit && typeof process !== 'undefined')
-				process.exit();
 			return results;
 		});
 	}
@@ -121,6 +84,8 @@ class Gunner {
 }
 
 module.exports = Gunner;
-module.exports.expect = _expect;
+module.exports.Gunner = Gunner;
+module.exports.expect = expect;
+module.exports.expectMany = expectMany;
 module.exports.Start = symbols.Start;
 module.exports.End = symbols.End;

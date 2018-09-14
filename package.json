@@ -1,6 +1,6 @@
 {
 	"name": "@klenty/gunner",
-	"version": "0.6.7",
+	"version": "0.8.6",
 	"description": "Zero magic, fast test-runner and assertion framework. No magic globals.",
 	"main": "index.js",
 	"repository": {
@@ -23,9 +23,9 @@
 	"dependencies": {
 		"@codefeathers/iseq": "^1.2.1",
 		"@codefeathers/promise.object": "^0.9.5",
-		"bluebird": "^3.5.1",
-		"chalk": "^2.4.1",
-		"eslint": "^5.2.0",
 		"json-stringify-safe": "^5.0.1"
+	},
+	"devDependencies": {
+		"eslint": "^5.2.0"
 	}
 }

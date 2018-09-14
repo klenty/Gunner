@@ -1,5 +1,3 @@
-const Promise = require('bluebird');
-
 const { flatten } = require('../util');
 const logger = require('../lib/logger');
 
