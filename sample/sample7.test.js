@@ -99,4 +99,4 @@ gunner.test('(should fail) should not resolve to 5', () =>
 const trace = process.argv.slice(2).indexOf('--trace') !== -1;
 const log = process.argv.slice(2).indexOf('--log') !== -1;
 
-gunner.run({ trace, log }).then(console.log);
+gunner.run({ trace, log });

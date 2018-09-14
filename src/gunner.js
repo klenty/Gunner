@@ -1,8 +1,10 @@
 'use strict';
 
 const { arrayOrPush } = require('./util');
-const caller = require('./lib/caller');
 
+const caller = require('./lib/caller');
+const emitter = require('./lib/emitter');
+const reporter = require('./reporters/default');
 const testrunner = require('./lib/testrunner');
 const { expect, expectMany } = require('./lib/expect');
 
@@ -67,15 +69,21 @@ class Gunner {
 	}
 
 	run (options = {}) {
+		(options.reporter || reporter)(emitter, options);
+
+		emitter.emit('start');
 		return testrunner(this, options)
 		.then(results => {
-			const success = results.filter(r => r.status === 'ok');
-			const successPercent = Math.floor(
-				success.length/results.length * 100
+			results.success = results.filter(r => r.status === 'ok');
+			results.successPercent = Math.floor(
+				results.success.length/results.length * 100
 			);
 
-			if((successPercent !== 100) && typeof process !== 'undefined')
+			if((results.successPercent !== 100)
+				&& typeof process !== 'undefined')
 				process.exitCode = 1;
+			emitter.emit('test end', results);
+			emitter.emit('end', results);
 
 			return results;
 		});
