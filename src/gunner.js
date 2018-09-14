@@ -67,23 +67,18 @@ class Gunner {
 	}
 
 	run (options = {}) {
-		return testrunner(this, options);
-		// .then(results => {
-		// 	const success = results.filter(r => r.result === 'pass');
-		// 	const successPercent = Math.floor(
-		// 		success.length/results.length * 100
-		// 	);
+		return testrunner(this, options)
+		.then(results => {
+			const success = results.filter(r => r.status === 'ok');
+			const successPercent = Math.floor(
+				success.length/results.length * 100
+			);
 
-		// 	if((successPercent !== 100) && typeof process !== 'undefined')
-		// 		process.exitCode = 1;
+			if((successPercent !== 100) && typeof process !== 'undefined')
+				process.exitCode = 1;
 
-		// 	return results;
-		// })
-		// .then(results => {
-		// 	if (options.exit && typeof process !== 'undefined')
-		// 		process.exit();
-		// 	return results;
-		// });
+			return results;
+		});
 	}
 
 }

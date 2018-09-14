@@ -25,6 +25,7 @@ const expectPromise = (pred, statement, options = {}) =>
 const library = require('./assertionsLibrary');
 
 const expects = Object.keys(library).reduce((acc, e) => {
+
 	const [ pred, statement, options ] = library[e];
 
 	acc[e] = expectPromise(
