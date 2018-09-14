@@ -39,10 +39,10 @@ class Strategy {
 	 */
 	fetchSpecs (options) {
 		this.__await__.push(
-			Promise.all(
-				requireDeep(options).map(
-					each => this.__gunnerInstances = this.compiler(this)(each)
-				)));
+			requireDeep(options)
+			.then(required => required.map(
+				each => this.__gunnerInstances = this.compiler(this)(each)
+			)));
 		return this;
 	}
 

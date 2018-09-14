@@ -59,5 +59,5 @@ const expect = (thing, args) =>
 
 const expectMany = Promise.all.bind(Promise);
 
-module.exports.expect = expect;
+module.exports = expect;
 module.exports.expectMany = expectMany;

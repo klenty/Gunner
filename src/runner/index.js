@@ -1,5 +1,4 @@
 const { flatten } = require('../util');
-const logger = require('../lib/logger');
 
 const runner = instances => (options = {}) => {
 
@@ -19,17 +18,14 @@ const runner = instances => (options = {}) => {
 	if (RunInstances.length !== instances.length)
 		throw new Error (`Not all instances were of type ${type}`);
 
-	return Promise.map(RunInstances, instance => {
+	return Promise.all(RunInstances.map(instance => {
 		return (
 			instance
-			.run()
+			.run(options)
 		);
-	})
+	}))
 	.then(results => {
-		results = flatten(results);
-		const log = logger.create(options, true);
-		log(results);
-		return results;
+		return flatten(results);
 	});
 
 };

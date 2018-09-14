@@ -7,7 +7,7 @@ const assertPromise = (bool, statementTuple, options = {}) => {
 
 	let [ statement, ...args ] = statementTuple;
 	statement = options.skipStatement ? () => options.skipStatement : statement;
-	console.log('skipStatement', statement())
+
 	if(isPromise(bool))
 		return bool.catch(() =>
 			createRejectionStatement(statement, ...args));

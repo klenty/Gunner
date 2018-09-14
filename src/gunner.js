@@ -6,7 +6,7 @@ const caller = require('./lib/caller');
 const emitter = require('./lib/emitter');
 const reporter = require('./reporters/default');
 const testrunner = require('./lib/testrunner');
-const { expect, expectMany } = require('./lib/expect');
+const expect = require('./lib/expect');
 
 const symbols = require('./util/symbols');
 
@@ -94,6 +94,6 @@ class Gunner {
 module.exports = Gunner;
 module.exports.Gunner = Gunner;
 module.exports.expect = expect;
-module.exports.expectMany = expectMany;
+module.exports.expectMany = expect.expectMany;
 module.exports.Start = symbols.Start;
 module.exports.End = symbols.End;
