@@ -1,5 +1,3 @@
-const Promise = require('bluebird');
-
 const requireDeep = require('../util/requireDeep');
 const Runner = require('../runner');
 
@@ -40,9 +38,11 @@ class Strategy {
 	 * @param {string|Array<string>=} options.pattern
 	 */
 	fetchSpecs (options) {
-		this.__await__.push(Promise.map(requireDeep(options), each => {
-			this.__gunnerInstances = this.compiler(this)(each);
-		}));
+		this.__await__.push(
+			Promise.all(
+				requireDeep(options).map(
+					each => this.__gunnerInstances = this.compiler(this)(each)
+				)));
 		return this;
 	}
 

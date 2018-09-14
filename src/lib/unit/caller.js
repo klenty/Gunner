@@ -2,10 +2,11 @@ const { isPromise } = require('../../util');
 
 const caller = (test, state) => {
 
-	let value, error;
+	let value, error, errored;
 	try {
 		value = test(state);
 	} catch (e) {
+		errored = true;
 		error = e;
 	}
 
@@ -13,12 +14,13 @@ const caller = (test, state) => {
 
 	if (promise) {
 		return value
-		.then(res => ({ resolve: res, promise: true }))
-		.catch(rej => ({ rejection: rej, promise: true }));
+		.then(res => ({ status: 'ok', resolve: res, promise: true }))
+		.catch(rej => ({ status: 'notOk', rejection: rej, promise: true }));
 	} else {
 		return Promise.resolve({
-			...(!error && {value}),
-			...(error && {error}),
+			status: errored ? 'notOk' : 'ok',
+			...(!errored && { value }),
+			...(errored && { error }),
 			promise: false,
 		});
 	}

@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const fs = require(`fs`).promises;
 const {
 	map,
