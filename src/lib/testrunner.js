@@ -52,13 +52,6 @@ const reduceQueue =
 
 					const { status } = result;
 
-					const identifier = (item.unit.label)
-						|| (queue
-						.filter(i => i.type === item.type)
-						.filter(i => (i.unit.description
-							=== item.unit.description))
-						.length);
-
 					if (item.type === '@test') {
 
 						const resultObject = {
@@ -73,13 +66,20 @@ const reduceQueue =
 
 					} else {
 
+						const identifier = (item.unit.label)
+							|| (queue
+							.filter(i => i.type === item.type)
+							.filter(i => (i.unit.description
+								=== item.unit.description))
+							.length);
+
 						const stateAddition =
 							/* eslint-disable-next-line */
 							status === 'ok'
 								? result.promise ? result.resolve : result.value
 								: null;
 
-						if (stateAddition)
+						if (identifier && stateAddition)
 							assignToObject(
 								acc.state, item.type
 							)(identifier, stateAddition);

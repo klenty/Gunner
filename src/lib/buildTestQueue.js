@@ -35,12 +35,12 @@ const buildTestTree = instance => {
 
 	));
 
-	testQueue.push.apply(
+	Array.prototype.push.apply(testQueue,
 		instance.__suite__.beforeHooks[symbols.End]
-		.map(wrap('@end')));
-	testQueue.push.apply(
+		.map(wrap('@beforeend')));
+	Array.prototype.push.apply(testQueue,
 		instance.__suite__.afterHooks[symbols.End]
-		.map(wrap(symbols.End)));
+		.map(wrap('@end')));
 
 	return testQueue;
 

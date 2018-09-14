@@ -46,14 +46,17 @@ const expect = (thing, args) =>
 	new Proxy({}, {
 		get: function (obj, prop) {
 			const toCheck = args ? thing(...args) : thing;
-			if (prop.slice(0, 3) === 'not')
+			if (expects.hasOwnProperty(prop))
+				return (...check) => expects[prop](toCheck)(...check);
+			else if (prop.slice(0, 3) === 'not')
 				return (...check) =>
 					negateP(
 						expects[
 						lowerCaseFirstLetter(prop.slice(3))
 						](toCheck)(...check)
 					);
-			return (...check) => expects[prop](toCheck)(...check);
+			else
+				throw new Error('Unknown assertion method', prop);
 		},
 	});
 
