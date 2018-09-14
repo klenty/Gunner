@@ -4,7 +4,7 @@ const _ = U.taggedStringify;
 
 module.exports.done =
 	[
-		resolve => resolve,
+		() => true,
 		() => null,
 	];
 module.exports.fail =

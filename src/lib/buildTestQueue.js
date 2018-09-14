@@ -1,3 +1,4 @@
+// Only imported for JSDoc
 /* eslint-disable-next-line */
 const Gunner = require('../gunner');
 const symbols = require('../util/symbols');
