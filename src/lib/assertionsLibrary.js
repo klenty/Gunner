@@ -2,14 +2,16 @@ const isEq = require('@codefeathers/iseq');
 const U = require('../util');
 const _ = U.taggedStringify;
 
-module.exports.done = [
-	() => true,
-	() => null,
-];
-module.exports.fail = [
-	() => false,
-	() => null,
-];
+module.exports.done =
+	[
+		resolve => resolve,
+		() => null,
+	];
+module.exports.fail =
+	[
+		() => false,
+		(_, rejection) => rejection,
+	];
 module.exports.exists =
 	[
 		val => typeof val !== 'undefined',
@@ -74,11 +76,42 @@ module.exports.resolvesTo =
 			: Promise.reject(`${val} was not a Promise`),
 		(val, thing) => _`'${val}' does not resolve to '${thing}'`,
 	];
+module.exports.isType =
+	[
+		(val, type) => (type === 'nil'
+			&& (val === 'null' || val === 'undefined'))
+				|| (typeof val === type)
+				|| (Array.isArray(val) && type === "array")
+				&& (val === null && type !== 'object'),
+		(val, type) => _`'${val}' is not of type '${type}'`,
+	];
+module.exports.greaterThan =
+	[
+		(val, compare) => val > compare,
+		(val, compare) => _`'${val}' is not greater than ${compare}`,
+	];
+module.exports.lessThan =
+	[
+		(val, compare) => val < compare,
+		(val, compare) => _`'${val}' is not less than ${compare}`
+	];
+module.exports.gte =
+	[
+		(val, compare) => val >= compare,
+		(val, compare) => _`'${val}' is less than ${compare}`
+	];
+module.exports.lte =
+	[
+		(val, compare) => val <= compare,
+		(val, compare) => _`'${val}' is greater than ${compare}`,
+	];
 
-/* Convenience methods */
+/* Convenience aliases */
 module.exports.success = module.exports.done;
 module.exports.succeed = module.exports.done;
 module.exports.failure = module.exports.fail;
 module.exports.equal = module.exports.equals;
 module.exports.deepEqual = module.exports.deepEquals;
 module.exports.match = module.exports.deepEquals;
+module.exports.greaterThanOrEqualTo = module.exports.gte;
+module.exports.lessThanOrEqualTo = module.exports.lte;
