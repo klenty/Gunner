@@ -60,7 +60,7 @@ const expect = (thing, args) =>
 		},
 	});
 
-const expectMany = Promise.all.bind(Promise);
+const expectMany = (...expects) => Promise.all(expects);
 
 module.exports = expect;
 module.exports.expectMany = expectMany;

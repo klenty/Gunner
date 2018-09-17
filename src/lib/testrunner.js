@@ -113,11 +113,11 @@ const reduceQueue =
  */
 const testrunner = (instance) => {
 
-	return pipe(
+	return Promise.object(pipe(
 		buildTestQueue,
 		reduceQueue,
 		pick('results'),
-	)(instance);
+	)(instance));
 
 };
 

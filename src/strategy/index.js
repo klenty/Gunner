@@ -1,5 +1,4 @@
 const requireDeep = require('../util/requireDeep');
-const Runner = require('../runner');
 
 class Strategy {
 
@@ -63,7 +62,7 @@ class Strategy {
 		const runOptions = options || this.__runTimeOptions;
 
 		return Promise.all(this.__await__).then(() => (
-			Runner(this.__gunnerInstances)(runOptions)));
+			this.__gunnerInstances.run(runOptions)));
 	}
 
 }

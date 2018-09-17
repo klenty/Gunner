@@ -22,6 +22,11 @@ module.exports.isArray =
 		val => Array.isArray(val),
 		val => _`${(val)} is not an array`,
 	];
+module.exports.isObject =
+	[
+		val => typeof val === 'object' && val !== null,
+		val => _`${val} is not an object`,
+	];
 module.exports.hasLength =
 	[
 		(val, l) => val.length === l,
