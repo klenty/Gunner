@@ -6,6 +6,8 @@ const statusMap = {
 
 };
 
+const convert = x => x;
+
 const Default = (runner, options) => {
 
 	runner.on('start', () => console.log('Started tests'));
@@ -40,3 +42,4 @@ const Default = (runner, options) => {
 };
 
 module.exports = Default;
+module.exports.convert = convert;
