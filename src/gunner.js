@@ -97,7 +97,10 @@ class Gunner {
 			emitter.emit('end', results);
 
 			return (options.request
-				? reporters[options.request].convert(results)
+				? {
+					[options.request]:
+						reporters[options.request].convert(results),
+					json: results }
 				: results);
 		});
 	}
