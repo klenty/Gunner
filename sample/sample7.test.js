@@ -3,7 +3,7 @@
  * used during development
  */
 
-const Gunner = require('../es5/dist.js');
+const Gunner = require('../es6');
 const expect = Gunner.expect;
 const expectMany = Gunner.expectMany;
 const gunner = new Gunner({ name: 'sample tests' });
@@ -99,4 +99,4 @@ gunner.test('(should fail) should not resolve to 5', () =>
 const trace = process.argv.slice(2).indexOf('--trace') !== -1;
 const reporter = process.argv.slice(2).indexOf('--log') !== -1;
 
-gunner.run({ trace, reporter });
+gunner.run({ trace, reporter: 'xunit' });

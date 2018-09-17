@@ -80,10 +80,15 @@ class Gunner {
 		emitter.emit('start');
 		return testrunner(this, options)
 		.then(results => {
+			results.count = results.length;
 			results.success = results.filter(r => r.status === 'ok');
+			results.failures = results.filter(r => r.status === 'notOk');
+			results.skipped = results.filter(r => r.status === 'skip');
 			results.successPercent = Math.floor(
 				results.success.length/results.length * 100
 			);
+
+			results.name = this.name;
 
 			if((results.successPercent !== 100)
 				&& typeof process !== 'undefined')
