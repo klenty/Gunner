@@ -92,8 +92,8 @@ class Gunner {
 }
 
 module.exports = Gunner;
-module.exports.Gunner = Gunner;
 module.exports.expect = expect;
 module.exports.expectMany = expect.expectMany;
 module.exports.Start = symbols.Start;
 module.exports.End = symbols.End;
+module.exports.Gunner = module.exports;

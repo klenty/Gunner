@@ -1,6 +1,6 @@
 # Gunner
 
-<img alt="Django Unchained" src="assets/gun.jpeg" height="350" />
+<img alt="Django Unchained" src="https://raw.githubusercontent.com/klenty/Gunner/master/assets/gun.jpeg" height="350" />
 
 #### _Tiny, but fully loaded._
 
@@ -13,11 +13,12 @@
 Create a new `Gunner` instance and simply write your tests. The assertion methods are passed in as the callback as an `expect` object to the test function.
 
 ```JavaScript
+const { Gunner, expect } = require('@klenty/gunner');
 // Create new instance
 const gunner = new Gunner();
 
 // Define tests
-gunner.test('arrays are equal', expect => {
+gunner.test('arrays are equal', () => {
 	return expect([1, 2,]).deepEqual([1 ,2]);
 });
 
@@ -28,19 +29,19 @@ gunner.run();
 ## Documentation
 
 - ### `Class`:
-	- #### [`Gunner.constructor`](DOCUMENTATION.md#new-gunner-options)
+	- #### [`Gunner.constructor`](https://github.com/klenty/Gunner/blob/master/DOCUMENTATION.md#new-gunner-options)
 
 - ### `Methods`:
-	- #### [`Gunner#test`](DOCUMENTATION.md#gunnertest-title-implementation)
-	- #### [`Gunner#before`](DOCUMENTATION.md#gunnerbefore-title-implementation)
-	- #### [`Gunner#after`](DOCUMENTATION.md#gunnerafter-title-implementation)
-	- #### [`Gunner#run`](DOCUMENTATION.md#gunnerrun-options)
+	- #### [`Gunner#test`](https://github.com/klenty/Gunner/blob/master/DOCUMENTATION.md#gunnertest-title-implementation)
+	- #### [`Gunner#before`](https://github.com/klenty/Gunner/blob/master/DOCUMENTATION.md#gunnerbefore-title-implementation)
+	- #### [`Gunner#after`](https://github.com/klenty/Gunner/blob/master/DOCUMENTATION.md#gunnerafter-title-implementation)
+	- #### [`Gunner#run`](https://github.com/klenty/Gunner/blob/master/DOCUMENTATION.md#gunnerrun-options)
 
 - ### `Constants`:
 	- #### `[Gunner.Start]`
 	- #### `[Gunner.End]`
 
-- ### [`State and Advanced Usage`](DOCUMENTATION.md#state)
+- ### [`State and Advanced Usage`](https://github.com/klenty/Gunner/blob/master/DOCUMENTATION.md#state)
 
 ## Credits
 
