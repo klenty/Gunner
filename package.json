@@ -1,8 +1,8 @@
 {
 	"name": "@klenty/gunner",
-	"version": "0.9.6",
+	"version": "0.10.0",
 	"description": "Zero magic, fast test-runner and assertion framework. No magic globals.",
-	"main": "index.js",
+	"main": "es6/index.js",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/klenty/gunner.git"
@@ -14,6 +14,10 @@
 		"tdd",
 		"unit testing"
 	],
+	"scripts": {
+		"build": "rm -rf ./es5 && mkdir ./es5 && browserify ./es6/index.js -s Gunner > ./es5/index.js && babel --presets=env --plugins=babel-plugin-transform-object-rest-spread ./es5/index.js -o ./es5/index.js",
+		"build:closure": "./scripts/closure.sh"
+	},
 	"author": "Muthu Kumar <@MKRhere> (https://mkr.pw)",
 	"license": "MIT",
 	"bugs": {
@@ -27,6 +31,10 @@
 		"tap-xunit": "^2.3.0"
 	},
 	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+		"babel-preset-env": "^1.7.0",
+		"browserify": "^16.2.2",
 		"eslint": "^5.2.0"
 	}
 }

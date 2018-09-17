@@ -3,7 +3,7 @@
  * used during development
  */
 
-const Gunner = require('../index.js');
+const Gunner = require('../es5/dist.js');
 const expect = Gunner.expect;
 const expectMany = Gunner.expectMany;
 const gunner = new Gunner({ name: 'sample tests' });
@@ -11,7 +11,7 @@ const a = 1;
 
 // gunner.before(Gunner.Start, () => console.log('Started tests!'));
 // gunner.before(Gunner.End, () => console.log('Ended tests!'));
-let runCount = 1;
+// let runCount = 1;
 // gunner.before('*', () => console.log(`Running test ${runCount++}`));
 
 gunner.test('should automatically pass', () => expect().done());
