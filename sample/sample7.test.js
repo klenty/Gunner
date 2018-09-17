@@ -9,10 +9,10 @@ const expectMany = Gunner.expectMany;
 const gunner = new Gunner({ name: 'sample tests' });
 const a = 1;
 
-gunner.before(Gunner.Start, () => console.log('Started tests!'));
-gunner.before(Gunner.End, () => console.log('Ended tests!'));
+// gunner.before(Gunner.Start, () => console.log('Started tests!'));
+// gunner.before(Gunner.End, () => console.log('Ended tests!'));
 let runCount = 1;
-gunner.before('*', () => console.log(`Running test ${runCount++}`));
+// gunner.before('*', () => console.log(`Running test ${runCount++}`));
 
 gunner.test('should automatically pass', () => expect().done());
 gunner.test(`should be equal`, () => expect(1).equal(1));
@@ -37,17 +37,17 @@ gunner.test('wait and resolve', () => {
 gunner.test('should resolve to 5', () =>
 	expect(Promise.resolve(5)).resolvesTo(5));
 
-gunner.before(
-	'file must have hello as content',
-	() => console.log('>> starting test! file must have hello as content'),
-	'helloContentBefore',
-);
+// gunner.before(
+// 	'file must have hello as content',
+// 	() => console.log('>> starting test! file must have hello as content'),
+// 	'helloContentBefore',
+// );
 
-gunner.after(
-	'file must have hello as content',
-	() => console.log('>> finished test! file must have hello as content'),
-	'helloContentAfter',
-);
+// gunner.after(
+// 	'file must have hello as content',
+// 	() => console.log('>> finished test! file must have hello as content'),
+// 	'helloContentAfter',
+// );
 
 gunner.test('file must have hello as content', async () => {
 	const { readFile } = require('fs').promises;
@@ -78,10 +78,10 @@ gunner.test('(should fail) multiple expect', () => {
 	a.b = 1;
 	a.c = 2;
 
-	return expectMany([
+	return expectMany(
 		expect(a).hasProp('b'),
 		expect(a).hasPair('c', 3),
-	]);
+	);
 
 });
 
@@ -97,6 +97,6 @@ gunner.test('(should fail) should not resolve to 5', () =>
 	expect(Promise.resolve()).resolvesTo(5));
 
 const trace = process.argv.slice(2).indexOf('--trace') !== -1;
-const log = process.argv.slice(2).indexOf('--log') !== -1;
+const reporter = process.argv.slice(2).indexOf('--log') !== -1;
 
-gunner.run({ trace, log });
+gunner.run({ trace, reporter });

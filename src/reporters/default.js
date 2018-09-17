@@ -6,13 +6,13 @@ const statusMap = {
 
 };
 
-function Default (runner, options) {
+const Default = (runner, options) => {
 
 	runner.on('start', () => console.log('Started tests'));
 
 	runner.on('test end', results => {
 
-		results.map(x => {
+		results.forEach(x => {
 
 			const s = statusMap[x.status];
 
@@ -37,6 +37,6 @@ function Default (runner, options) {
 
 	});
 
-}
+};
 
 module.exports = Default;

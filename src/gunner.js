@@ -4,7 +4,7 @@ const { arrayOrPush } = require('./util');
 
 const caller = require('./lib/caller');
 const emitter = require('./lib/emitter');
-const reporter = require('./reporters/default');
+const reporters = require('./reporters');
 const testrunner = require('./lib/testrunner');
 const expect = require('./lib/expect');
 
@@ -69,7 +69,13 @@ class Gunner {
 	}
 
 	run (options = {}) {
-		(options.reporter || reporter)(emitter, options);
+
+		if (options.reporter === true)
+			reporters.default(emitter, options);
+		else if (typeof options.reporter === 'function')
+			options.reporter(emitter, options);
+		else if (reporters[options.reporter])
+			reporters[options.reporter](emitter, options);
 
 		emitter.emit('start');
 		return testrunner(this, options)
