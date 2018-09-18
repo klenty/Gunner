@@ -1,6 +1,14 @@
-const { flatten } = require('../util');
+const reporters = require('../reporters');
+
+const isBrowser =
+	new Function("try { return this === window } catch (e) { return false }");
 
 const runner = instances => (options = {}) => {
+
+	if(isBrowser())
+		throw new Error(
+			'Runner is not adapted for browsers yet.'
+			+ ' Use regular Gunner');
 
 	instances = Array.isArray(instances) ? instances : [ instances ];
 
@@ -21,11 +29,18 @@ const runner = instances => (options = {}) => {
 	return Promise.all(RunInstances.map(instance => {
 		return (
 			instance
-			.run(options)
+			.run({ reporter: 'min' })
 		);
 	}))
 	.then(results => {
-		return flatten(results);
+
+		return options.request
+			? {
+				default: results,
+				[options.request]: reporters[options.request].convert(results)
+			}
+			: results;
+
 	});
 
 };
