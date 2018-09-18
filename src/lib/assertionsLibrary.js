@@ -65,7 +65,7 @@ module.exports.hasProp =
 module.exports.hasPair =
 	[
 		(val, ...pair) => isEq(val[pair[0]], pair[1]),
-		(val, ...pair) => _`<${pair}> does not exist in ${val}`,
+		(val, ...pair) => _`${pair} does not exist in ${val}`,
 	];
 module.exports.isPromise =
 	[

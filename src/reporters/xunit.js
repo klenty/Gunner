@@ -11,7 +11,6 @@ const tag = (name, attrs, close, content) => {
 
 	tag = "<" + name + (pairs.length ? " " + pairs.join(" ") : "") + end;
 	if (content) {
-		// content = content instanceof String ? content : escape(content);
 		tag += content + "</" + name + end;
 	}
 	return new String(tag);
@@ -28,6 +27,7 @@ const convert = results => {
 		tag(
 			'testsuite',
 			{
+				name: results.name,
 				tests: count,
 				success: success.length,
 				failures: failures.length,
@@ -41,10 +41,10 @@ const convert = results => {
 						? tag('skipped', {}, true)
 						: tag(
 							'failure', {},
-							!r.reason, r.reason ? escape(r.reason) : ''));
+							!r.reason, r.reason ? r.reason : ''));
 				acc += tag(
 					'testcase',
-					{ name: escape(r.description) },
+					{ name: r.description },
 					close,
 					content || ''
 				);
