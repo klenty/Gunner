@@ -31,7 +31,9 @@ const convert = results => {
 				tests: count,
 				success: success.length,
 				failures: failures.length,
-				skipped: skipped.length
+				skipped: skipped.length,
+				timestamp: new Date().toUTCString(),
+				time: (results.duration / 1000) || 0,
 			},
 			false,
 			results.reduce((acc, r) => {
@@ -44,7 +46,10 @@ const convert = results => {
 							!r.reason, r.reason ? r.reason : ''));
 				acc += tag(
 					'testcase',
-					{ name: r.description },
+					{
+						name: r.description,
+						time: (r.duration / 1000) || 0,
+					},
 					close,
 					content || ''
 				);

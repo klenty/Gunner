@@ -1,6 +1,6 @@
 {
 	"name": "@klenty/gunner",
-	"version": "0.10.4",
+	"version": "0.10.6",
 	"description": "Zero magic, fast test-runner and assertion framework. No magic globals.",
 	"main": "es6/index.js",
 	"repository": {
@@ -22,6 +22,9 @@
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/klenty/gunner/issues"
+	},
+	"browser": {
+		"perf_utils": "src/util/perf_hooks.js"
 	},
 	"homepage": "https://github.com/klenty/gunner#readme",
 	"dependencies": {

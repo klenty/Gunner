@@ -3,6 +3,8 @@
 const Gunner = require('../gunner');
 Promise.object = require('@codefeathers/promise.object');
 
+const { performance } = require('perf_hooks');
+
 const { last, pipe, pick, assignToObject } = require('../util');
 
 const buildTestQueue = require('./buildTestQueue');
@@ -50,12 +52,13 @@ const reduceQueue =
 				})
 				.then(result => {
 
-					const { status } = result;
+					const { status, duration } = result;
 
 					if (item.type === '@test') {
 
 						const resultObject = {
 							status,
+							duration,
 							description: item.unit.description,
 							...((status === 'notOk' || status === 'skip')
 							&& {reason : result.error
@@ -113,11 +116,16 @@ const reduceQueue =
  */
 const testrunner = (instance) => {
 
+	const perf = { start: performance.now() };
+
 	return Promise.object(pipe(
 		buildTestQueue,
 		reduceQueue,
 		pick('results'),
-	)(instance));
+	)(instance)).then(results => {
+		results.duration = performance.now() - perf.start;
+		return results;
+	});
 
 };
 
