@@ -6,7 +6,7 @@
 const Gunner = require('../es6');
 const expect = Gunner.expect;
 const expectMany = Gunner.expectMany;
-const gunner = new Gunner({ name: 'sample tests' });
+const gunner = new Gunner('sample tests');
 const a = 1;
 
 // gunner.before(Gunner.Start, () => console.log('Started tests!'));
@@ -99,4 +99,5 @@ gunner.test('(should fail) should not resolve to 5', () =>
 const trace = process.argv.slice(2).indexOf('--trace') !== -1;
 const reporter = process.argv.slice(2).indexOf('--log') !== -1;
 
-gunner.run({ trace, reporter }).then(console.log);
+gunner.run({ trace, reporter });
+// gunner.run({ reporter:'xunit' });

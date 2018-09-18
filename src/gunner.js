@@ -100,7 +100,7 @@ class Gunner {
 				? {
 					[options.request]:
 						reporters[options.request].convert(results),
-					json: results }
+					default: results }
 				: results);
 		});
 	}

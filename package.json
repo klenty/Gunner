@@ -28,7 +28,7 @@
 		"@codefeathers/iseq": "^1.2.1",
 		"@codefeathers/promise.object": "^0.9.5",
 		"json-stringify-safe": "^5.0.1",
-		"tap-xunit": "^2.3.0"
+		"jsontoxml": "^1.0.0"
 	},
 	"devDependencies": {
 		"babel-cli": "^6.26.0",

@@ -1,72 +1,58 @@
-const tag = (name, attrs, close, content) => {
-	const end = close ? "/>" : ">";
-	const pairs = [];
-	let tag;
+const toXML = require('jsontoxml');
 
-	Object.keys(attrs).forEach(key => {
-		if (Object.prototype.hasOwnProperty.call(attrs, key)) {
-			pairs.push(key + '="' + (attrs[key]) + '"');
-		}
-	});
+const toJSON = resultsArray => {
 
-	tag = "<" + name + (pairs.length ? " " + pairs.join(" ") : "") + end;
-	if (content) {
-		tag += content + "</" + name + end;
-	}
-	return new String(tag);
-};
+	return {
+		testsuites: resultsArray.map(results => {
 
-const convert = results => {
+			const { name, count, success, failures, skipped } = results;
 
-	const { count, success, failures, skipped } = results;
+			return {
+				name: 'testsuite',
+				attrs: {
+					name,
+					tests: count,
+					success: success.length,
+					failures: failures.length,
+					skipped: skipped.length,
+					timestamp: new Date().toUTCString(),
+					time: (results.duration / 1000) || 0,
+				},
+				children: results.reduce((acc, r) => {
+					const content = r.status !== 'ok' &&
+						(r.status === 'skip'
+							? 'skipped'
+							: {
+								name: 'failure',
+								text: r.reason
+									? (r.reason && r.reason.stack) : ''
+							});
+					acc.push({
+						name: 'testcase',
+						attrs: {
+							name: r.description,
+							time: (r.duration / 1000) || 0,
+						},
+						...(typeof content === 'object'
+							&& { text: content && content.stack }),
+						...(typeof content === 'object'
+							&& { children: [ content ]}),
+					});
+					return acc;
+				}, []),
+			};
 
-	return '<?xml version="1.0"?>' + tag(
-		'testsuites',
-		{},
-		false,
-		tag(
-			'testsuite',
-			{
-				name: results.name,
-				tests: count,
-				success: success.length,
-				failures: failures.length,
-				skipped: skipped.length,
-				timestamp: new Date().toUTCString(),
-				time: (results.duration / 1000) || 0,
-			},
-			false,
-			results.reduce((acc, r) => {
-				const close = r.status === 'ok';
-				const content = r.status !== 'ok' &&
-					(r.status === 'skip'
-						? tag('skipped', {}, true)
-						: tag(
-							'failure', {},
-							!r.reason, r.reason ? r.reason : ''));
-				acc += tag(
-					'testcase',
-					{
-						name: r.description,
-						time: (r.duration / 1000) || 0,
-					},
-					close,
-					content || ''
-				);
-				return acc;
-			}, '')
-		)
-	);
+		})
+	};
 
 };
 
-const xunit = runner => {
-	runner.on("end", results => {
+const convert = results =>
+	toXML(toJSON(results),
+		{ xmlHeader: { standalone: true }});
 
-		console.log(convert(results));
-
-	});
-};
+const xunit = runner =>
+	runner.on("end", results => console.log(convert([ results ])));
 
 module.exports = xunit;
 module.exports.convert = convert;

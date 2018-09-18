@@ -1,8 +1,15 @@
-const chalk = require('chalk');
 const { EOL } = require('os');
 
 module.exports = {
-	greenLine: chalk.green('------------------------------------'),
-	redLine: chalk.red('------------------------------------'),
 	EOL,
+	eventMap: {
+		'ok': 'pass',
+		'notOk': 'fail',
+		'skip': 'skip',
+	},
+	eventVerbs: {
+		pass: [ 'pass', 'passing', 'passed' ],
+		fail: [ 'fail', 'failing', 'failed' ],
+		skip: [ 'skip', 'skipping', 'skipped' ],
+	},
 };

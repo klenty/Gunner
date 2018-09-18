@@ -3,10 +3,10 @@
 const Gunner = require('../gunner');
 Promise.object = require('@codefeathers/promise.object');
 
-const { performance } = require('perf_hooks');
-
 const { last, pipe, pick, assignToObject } = require('../util');
+const { eventMap } = require('../util/constants');
 
+const emitter = require('./emitter');
 const buildTestQueue = require('./buildTestQueue');
 
 const findSkip = (skip, unit) => {
@@ -65,6 +65,12 @@ const reduceQueue =
 								|| result.rejection
 								|| result.description})
 						};
+
+						emitter.emit(
+							eventMap[status],
+							resultObject
+						);
+
 						acc.results.push(resultObject);
 
 					} else {
