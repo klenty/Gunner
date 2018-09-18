@@ -116,14 +116,14 @@ const reduceQueue =
  */
 const testrunner = (instance) => {
 
-	const perf = { start: performance.now() };
+	const perf = { start: Date.now() };
 
 	return Promise.object(pipe(
 		buildTestQueue,
 		reduceQueue,
 		pick('results'),
 	)(instance)).then(results => {
-		results.duration = performance.now() - perf.start;
+		results.duration = Date.now() - perf.start;
 		return results;
 	});
 

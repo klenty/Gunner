@@ -1,5 +1,3 @@
-const { performance } = require('perf_hooks');
-
 const { isPromise } = require('../util');
 
 const caller = (test, state) => {
@@ -8,11 +6,11 @@ const caller = (test, state) => {
 
 	let value, error, errored;
 	try {
-		perf.start = performance.now();
+		perf.start = Date.now();
 		value = test(state);
-		perf.end = performance.now();
+		perf.end = Date.now();
 	} catch (e) {
-		perf.end = performance.now();
+		perf.end = Date.now();
 		errored = true;
 		error = e;
 	}
@@ -22,13 +20,13 @@ const caller = (test, state) => {
 	if (promise) {
 		return value
 		.then(res => ({
-			duration: performance.now() - perf.start,
+			duration: Date.now() - perf.start,
 			status: 'ok',
 			resolve: res,
 			promise: true
 		}))
 		.catch(rej => ({
-			duration: performance.now() - perf.start,
+			duration: Date.now() - perf.start,
 			status: 'notOk',
 			rejection: rej,
 			promise: true

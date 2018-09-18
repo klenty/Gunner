@@ -23,9 +23,6 @@
 	"bugs": {
 		"url": "https://github.com/klenty/gunner/issues"
 	},
-	"browser": {
-		"perf_utils": "src/util/perf_hooks.js"
-	},
 	"homepage": "https://github.com/klenty/gunner#readme",
 	"dependencies": {
 		"@codefeathers/iseq": "^1.2.1",
