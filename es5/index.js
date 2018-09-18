@@ -1387,11 +1387,8 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 
 			module.exports = buildTestTree;
 		}, { "../gunner": 9, "../util/symbols": 22 }], 13: [function (require, module, exports) {
-			var _require3 = require('perf_hooks'),
-			    performance = _require3.performance;
-
-			var _require4 = require('../util'),
-			    isPromise = _require4.isPromise;
+			var _require3 = require('../util'),
+			    isPromise = _require3.isPromise;
 
 			var caller = function caller(test, state) {
 
@@ -1401,11 +1398,11 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 				    error = void 0,
 				    errored = void 0;
 				try {
-					perf.start = performance.now();
+					perf.start = Date.now();
 					value = test(state);
-					perf.end = performance.now();
+					perf.end = Date.now();
 				} catch (e) {
-					perf.end = performance.now();
+					perf.end = Date.now();
 					errored = true;
 					error = e;
 				}
@@ -1415,14 +1412,14 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 				if (promise) {
 					return value.then(function (res) {
 						return {
-							duration: performance.now() - perf.start,
+							duration: Date.now() - perf.start,
 							status: 'ok',
 							resolve: res,
 							promise: true
 						};
 					}).catch(function (rej) {
 						return {
-							duration: performance.now() - perf.start,
+							duration: Date.now() - perf.start,
 							status: 'notOk',
 							rejection: rej,
 							promise: true
@@ -1439,7 +1436,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			};
 
 			module.exports = caller;
-		}, { "../util": 21, "perf_hooks": 5 }], 14: [function (require, module, exports) {
+		}, { "../util": 21 }], 14: [function (require, module, exports) {
 			var EventEmitter = require('events');
 
 			var GunnerEmitter = function (_EventEmitter) {
@@ -1458,9 +1455,9 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 		}, { "events": 6 }], 15: [function (require, module, exports) {
 			'use strict';
 
-			var _require5 = require('../util'),
-			    liftPromise = _require5.liftPromise,
-			    lowerCaseFirstLetter = _require5.lowerCaseFirstLetter;
+			var _require4 = require('../util'),
+			    liftPromise = _require4.liftPromise,
+			    lowerCaseFirstLetter = _require4.lowerCaseFirstLetter;
 
 			var library = require('./assertionsLibrary');
 			var assertPromise = require('./assertPromise');
@@ -1526,14 +1523,14 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			var Gunner = require('../gunner');
 			Promise.object = require('@codefeathers/promise.object');
 
-			var _require6 = require('perf_hooks'),
-			    performance = _require6.performance;
+			var _require5 = require('perf_hooks'),
+			    performance = _require5.performance;
 
-			var _require7 = require('../util'),
-			    last = _require7.last,
-			    pipe = _require7.pipe,
-			    pick = _require7.pick,
-			    assignToObject = _require7.assignToObject;
+			var _require6 = require('../util'),
+			    last = _require6.last,
+			    pipe = _require6.pipe,
+			    pick = _require6.pick,
+			    assignToObject = _require6.assignToObject;
 
 			var buildTestQueue = require('./buildTestQueue');
 
@@ -1618,10 +1615,10 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
     */
 			var testrunner = function testrunner(instance) {
 
-				var perf = { start: performance.now() };
+				var perf = { start: Date.now() };
 
 				return Promise.object(pipe(buildTestQueue, reduceQueue, pick('results'))(instance)).then(function (results) {
-					results.duration = performance.now() - perf.start;
+					results.duration = Date.now() - perf.start;
 					return results;
 				});
 			};
