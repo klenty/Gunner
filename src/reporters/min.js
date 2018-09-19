@@ -1,4 +1,5 @@
 const { eventMap, eventVerbs } = require('../util/constants');
+const { clear } = require('../util/nodeutils');
 
 const convert = x => x;
 
@@ -9,15 +10,6 @@ const count = {
 	collapse: function() {
 		return this.pass + this.fail + this.skip;
 	}
-};
-
-const clear = () => {
-
-	// clear screen
-	process.stdout.write('\u001b[2J');
-	// set cursor position to top
-	process.stdout.write('\u001b[1;1H');
-
 };
 
 const doneHandler = event => {

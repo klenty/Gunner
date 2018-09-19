@@ -26,6 +26,8 @@ const runner = instances => (options = {}) => {
 	if (RunInstances.length !== instances.length)
 		throw new Error (`Not all instances were of type ${type}`);
 
+	const perf = { start: Date.now() };
+
 	return Promise.all(RunInstances.map(instance => {
 		return (
 			instance
@@ -33,6 +35,10 @@ const runner = instances => (options = {}) => {
 		);
 	}))
 	.then(results => {
+		perf.end = Date.now();
+		results.start = perf.start.toUTCString();
+		results.end = perf.end.toUTCString();
+		results.duration = perf.end - perf.start;
 
 		return options.request
 			? {

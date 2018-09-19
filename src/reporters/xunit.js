@@ -1,4 +1,5 @@
 const toXML = require('jsontoxml');
+const { clear } = require('../util/nodeutils');
 
 const toJSON = resultsArray => {
 
@@ -52,7 +53,7 @@ const convert = results =>
 		{ xmlHeader: { standalone: true }});
 
 const xunit = runner =>
-	runner.on("end", results => console.log(convert([ results ])));
+	runner.on("end", results => (clear(), console.log(convert([ results ]))));
 
 module.exports = xunit;
 module.exports.convert = convert;

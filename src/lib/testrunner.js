@@ -129,7 +129,10 @@ const testrunner = (instance) => {
 		reduceQueue,
 		pick('results'),
 	)(instance)).then(results => {
-		results.duration = Date.now() - perf.start;
+		perf.end = Date.now();
+		results.end = perf.end.toUTCString();
+		results.start = perf.start.toUTCString();
+		results.duration = perf.end - perf.start;
 		return results;
 	});
 
