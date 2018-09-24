@@ -1911,13 +1911,16 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			module.exports = Default;
 			module.exports.convert = convert;
 		}, {}], 19: [function (require, module, exports) {
+			var def = require('./default');
+			var tap = require('./tap');
+			var xunit = require('./xunit');
+			var min = require('./min');
+
 			module.exports = {
-
-				default: require('./default'),
-				tap: require('./tap'),
-				xunit: require('./xunit'),
-				min: require('./min')
-
+				default: def,
+				tap: tap,
+				xunit: xunit,
+				min: min
 			};
 		}, { "./default": 18, "./min": 20, "./tap": 21, "./xunit": 22 }], 20: [function (require, module, exports) {
 			var _require7 = require('../util/constants'),
