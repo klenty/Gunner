@@ -6,11 +6,11 @@ const caller = (test, state) => {
 
 	let value, error, errored;
 	try {
-		perf.start = Date.now();
+		perf.start = new Date();
 		value = test(state);
-		perf.end = Date.now();
+		perf.end = new Date();
 	} catch (e) {
-		perf.end = Date.now();
+		perf.end = new Date();
 		errored = true;
 		error = e;
 	}
@@ -20,13 +20,13 @@ const caller = (test, state) => {
 	if (promise) {
 		return value
 		.then(res => ({
-			duration: Date.now() - perf.start,
+			duration: new Date() - perf.start,
 			status: 'ok',
 			resolve: res,
 			promise: true
 		}))
 		.catch(rej => ({
-			duration: Date.now() - perf.start,
+			duration: new Date() - perf.start,
 			status: 'notOk',
 			rejection: rej,
 			promise: true
