@@ -31,10 +31,14 @@ var toJSON = function toJSON(resultsArray) {
           time: results.duration / 1000 || 0
         },
         children: results.reduce(function (acc, r) {
-          var content = r.status !== 'ok' && (r.status === 'skip' ? 'skipped' : {
+          var reason = r.reason ? r.reason.stack || r.reason : '';
+          var content = r.status !== 'ok' && r.status === 'skip' ? {
+            name: 'skipped',
+            text: reason
+          } : {
             name: 'failure',
-            text: r.reason ? r.reason && r.reason.stack : ''
-          });
+            text: reason
+          };
           acc.push(_objectSpread({
             name: 'testcase',
             attrs: {
