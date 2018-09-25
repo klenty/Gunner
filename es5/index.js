@@ -1640,11 +1640,11 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 				    error = void 0,
 				    errored = void 0;
 				try {
-					perf.start = Date.now();
+					perf.start = new Date();
 					value = test(state);
-					perf.end = Date.now();
+					perf.end = new Date();
 				} catch (e) {
-					perf.end = Date.now();
+					perf.end = new Date();
 					errored = true;
 					error = e;
 				}
@@ -1654,14 +1654,14 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 				if (promise) {
 					return value.then(function (res) {
 						return {
-							duration: Date.now() - perf.start,
+							duration: new Date() - perf.start,
 							status: 'ok',
 							resolve: res,
 							promise: true
 						};
 					}).catch(function (rej) {
 						return {
-							duration: Date.now() - perf.start,
+							duration: new Date() - perf.start,
 							status: 'notOk',
 							rejection: rej,
 							promise: true
@@ -1861,10 +1861,10 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
     */
 			var testrunner = function testrunner(instance) {
 
-				var perf = { start: Date.now() };
+				var perf = { start: new Date() };
 
 				return Promise.object(pipe(buildTestQueue, reduceQueue, pick('results'))(instance)).then(function (results) {
-					perf.end = Date.now();
+					perf.end = new Date();
 					results.end = perf.end.toUTCString();
 					results.start = perf.start.toUTCString();
 					results.duration = perf.end - perf.start;
@@ -2085,12 +2085,12 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 
 					if (RunInstances.length !== instances.length) throw new Error("Not all instances were of type " + type);
 
-					var perf = { start: Date.now() };
+					var perf = { start: new Date() };
 
 					return Promise.all(RunInstances.map(function (instance) {
 						return instance.run({ reporter: 'min' });
 					})).then(function (results) {
-						perf.end = Date.now();
+						perf.end = new Date();
 						results.start = perf.start.toUTCString();
 						results.end = perf.end.toUTCString();
 						results.duration = perf.end - perf.start;
@@ -2328,10 +2328,14 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 
 			};
 		}, { "json-stringify-safe": 6 }], 26: [function (require, module, exports) {
-			(function (process) {
+			(function (global) {
 				module.exports = {
 
 					clear: function clear() {
+
+						if (typeof global === 'undefined' || typeof global.process === 'undefined' || typeof global.process.stdout === 'undefined') return;
+
+						var process = global.process;
 
 						// clear screen
 						process.stdout.write("\x1B[2J");
@@ -2340,8 +2344,8 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 					}
 
 				};
-			}).call(this, require('_process'));
-		}, { "_process": 9 }], 27: [function (require, module, exports) {
+			}).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
+		}, {}], 27: [function (require, module, exports) {
 			module.exports = {
 
 				Start: Symbol('Start'),
