@@ -1,6 +1,6 @@
 // Only imported for JSDoc
 /* eslint-disable-next-line */
-const Gunner = require('../gunner');
+const Gunner = require('../Gunner');
 const symbols = require('../util/symbols');
 
 const wrap = type => unit => ({ type, unit });

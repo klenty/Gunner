@@ -1,9 +1,9 @@
-const reporters = require('../reporters');
+const reporters = require('./reporters');
 
 const isBrowser =
 	new Function("try { return this === window } catch (e) { return false }");
 
-const runner = instances => (options = {}) => {
+const Runner = instances => (options = {}) => {
 
 	if(isBrowser())
 		throw new Error(
@@ -51,4 +51,4 @@ const runner = instances => (options = {}) => {
 
 };
 
-module.exports = runner;
+module.exports = Runner;

@@ -1,1 +1,1 @@
-module.exports = require('./src/runner');
+module.exports = require('./src/Runner');

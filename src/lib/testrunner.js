@@ -1,6 +1,6 @@
 // Only imported for JSDoc
 /* eslint-disable-next-line */
-const Gunner = require('../gunner');
+const Gunner = require('../Gunner');
 Promise.object = require('@codefeathers/promise.object');
 
 const { last, pipe, pick, assignToObject } = require('../util');

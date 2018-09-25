@@ -109,7 +109,6 @@ class Gunner {
 const expect = require('./lib/expect');
 
 module.exports = Gunner;
-module.exports.Runner = require('./runner');
 module.exports.expect = expect;
 module.exports.expectMany = expect.expectMany;
 module.exports.Start = symbols.Start;

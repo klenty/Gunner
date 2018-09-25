@@ -3,7 +3,7 @@
  * used during development
  */
 
-const { Gunner, expect, expectMany } = require('..');
+const { Gunner, expect, expectMany } = require('../es5/Gunner');
 const gunner = new Gunner({ name: 'state tests' });
 
 gunner.before(Gunner.Start, () => 'world', 'hello');

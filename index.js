@@ -1,1 +1,1 @@
-module.exports = require('./src/gunner');
+module.exports = require('./src/Gunner');
