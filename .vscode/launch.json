@@ -8,7 +8,8 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Debug Gunner",
-			"program": "${workspaceFolder}/sample/sample.test.js",
+			"runtimeExecutable": "/home/mkr/.nvs/node/10.8.0/x64/bin/node",
+			"program": "${workspaceFolder}/sample/sample7.test.js",
 			"args": [
 				"--log",
 				"--trace",

@@ -3,7 +3,7 @@
  * used during development
  */
 
-const Gunner = require('../es5/Gunner');
+const Gunner = require('../src/Gunner');
 const expect = Gunner.expect;
 const expectMany = Gunner.expectMany;
 const gunner = new Gunner('sample tests');
@@ -37,17 +37,10 @@ gunner.test('wait and resolve', () => {
 gunner.test('should resolve to 5', () =>
 	expect(Promise.resolve(5)).resolvesTo(5));
 
-// gunner.before(
-// 	'file must have hello as content',
-// 	() => console.log('>> starting test! file must have hello as content'),
-// 	'helloContentBefore',
-// );
-
-// gunner.after(
-// 	'file must have hello as content',
-// 	() => console.log('>> finished test! file must have hello as content'),
-// 	'helloContentAfter',
-// );
+gunner.before(
+	'file must have hello as content',
+	() => { throw new Error('>> I caused a before hook to fail!') }
+);
 
 gunner.test('file must have hello as content', async () => {
 	const { readFile } = require('fs').promises;
@@ -99,5 +92,5 @@ gunner.test('(should fail) should not resolve to 5', () =>
 const trace = process.argv.slice(2).indexOf('--trace') !== -1;
 const reporter = process.argv.slice(2).indexOf('--log') !== -1;
 
-gunner.run({ trace, reporter });
-// gunner.run({ reporter:'xunit' });
+// gunner.run({ trace, reporter });
+gunner.run({ reporter:'xunit' });

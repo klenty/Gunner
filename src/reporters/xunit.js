@@ -20,14 +20,11 @@ const toJSON = resultsArray => {
 					time: (results.duration / 1000) || 0,
 				},
 				children: results.reduce((acc, r) => {
+					const reason = r.reason ? (r.reason.stack || r.reason) : '';
 					const content = r.status !== 'ok' &&
-						(r.status === 'skip'
-							? 'skipped'
-							: {
-								name: 'failure',
-								text: r.reason
-									? (r.reason && r.reason.stack) : ''
-							});
+						r.status === 'skip'
+						? { name: 'skipped', text: reason }
+						: { name: 'failure', text: reason };
 					acc.push({
 						name: 'testcase',
 						attrs: {
