@@ -72,8 +72,8 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			}return o;
 		}return r;
 	}()({ 1: [function (require, module, exports) {
-			module.exports = require('../src/gunner');
-		}, { "../src/gunner": 10 }], 2: [function (require, module, exports) {
+			module.exports = require('./src/gunner');
+		}, { "./src/gunner": 10 }], 2: [function (require, module, exports) {
 			(function (global) {
 				(function (f) {
 					if ((typeof exports === "undefined" ? "undefined" : _typeof2(exports)) === "object" && typeof module !== "undefined") {
@@ -1325,7 +1325,6 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 				var emitter = require('./lib/emitter');
 				var reporters = require('./reporters');
 				var testrunner = require('./lib/testrunner');
-				var expect = require('./lib/expect');
 
 				var symbols = require('./util/symbols');
 
@@ -1429,14 +1428,17 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 					return Gunner;
 				}();
 
+				var expect = require('./lib/expect');
+
 				module.exports = Gunner;
+				module.exports.Runner = require('./runner');
 				module.exports.expect = expect;
 				module.exports.expectMany = expect.expectMany;
 				module.exports.Start = symbols.Start;
 				module.exports.End = symbols.End;
 				module.exports.Gunner = module.exports;
 			}).call(this, require('_process'));
-		}, { "./lib/caller": 14, "./lib/emitter": 15, "./lib/expect": 16, "./lib/testrunner": 17, "./reporters": 19, "./util": 24, "./util/symbols": 26, "_process": 9 }], 11: [function (require, module, exports) {
+		}, { "./lib/caller": 14, "./lib/emitter": 15, "./lib/expect": 16, "./lib/testrunner": 17, "./reporters": 19, "./runner": 23, "./util": 25, "./util/symbols": 27, "_process": 9 }], 11: [function (require, module, exports) {
 			var _require2 = require('../util'),
 			    isPromise = _require2.isPromise;
 
@@ -1467,7 +1469,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			};
 
 			module.exports = assertPromise;
-		}, { "../util": 24 }], 12: [function (require, module, exports) {
+		}, { "../util": 25 }], 12: [function (require, module, exports) {
 			var isEq = require('@codefeathers/iseq');
 			var U = require('../util');
 			var _ = U.taggedStringify;
@@ -1592,7 +1594,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			module.exports.match = module.exports.deepEquals;
 			module.exports.greaterThanOrEqualTo = module.exports.gte;
 			module.exports.lessThanOrEqualTo = module.exports.lte;
-		}, { "../util": 24, "@codefeathers/iseq": 2 }], 13: [function (require, module, exports) {
+		}, { "../util": 25, "@codefeathers/iseq": 2 }], 13: [function (require, module, exports) {
 			// Only imported for JSDoc
 			/* eslint-disable-next-line */
 			var Gunner = require('../gunner');
@@ -1626,7 +1628,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			};
 
 			module.exports = buildTestTree;
-		}, { "../gunner": 10, "../util/symbols": 26 }], 14: [function (require, module, exports) {
+		}, { "../gunner": 10, "../util/symbols": 27 }], 14: [function (require, module, exports) {
 			var _require3 = require('../util'),
 			    isPromise = _require3.isPromise;
 
@@ -1676,7 +1678,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			};
 
 			module.exports = caller;
-		}, { "../util": 24 }], 15: [function (require, module, exports) {
+		}, { "../util": 25 }], 15: [function (require, module, exports) {
 			var EventEmitter = require('events');
 
 			var GunnerEmitter = function (_EventEmitter) {
@@ -1757,7 +1759,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 
 			module.exports = expect;
 			module.exports.expectMany = expectMany;
-		}, { "../util": 24, "./assertPromise": 11, "./assertionsLibrary": 12 }], 17: [function (require, module, exports) {
+		}, { "../util": 25, "./assertPromise": 11, "./assertionsLibrary": 12 }], 17: [function (require, module, exports) {
 			// Only imported for JSDoc
 			/* eslint-disable-next-line */
 			var Gunner = require('../gunner');
@@ -1871,7 +1873,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			};
 
 			module.exports = testrunner;
-		}, { "../gunner": 10, "../util": 24, "../util/constants": 23, "./buildTestQueue": 13, "./emitter": 15, "@codefeathers/promise.object": 3 }], 18: [function (require, module, exports) {
+		}, { "../gunner": 10, "../util": 25, "../util/constants": 24, "./buildTestQueue": 13, "./emitter": 15, "@codefeathers/promise.object": 3 }], 18: [function (require, module, exports) {
 			var statusMap = {
 
 				'ok': ['ok', '✅'],
@@ -1971,7 +1973,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 
 			module.exports = Min;
 			module.exports.convert = convert;
-		}, { "../util/constants": 23, "../util/nodeutils": 25 }], 21: [function (require, module, exports) {
+		}, { "../util/constants": 24, "../util/nodeutils": 26 }], 21: [function (require, module, exports) {
 			var statusMap = {
 
 				'ok': 'ok',
@@ -2057,7 +2059,51 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 
 			module.exports = xunit;
 			module.exports.convert = convert;
-		}, { "../util/nodeutils": 25, "jsontoxml": 7 }], 23: [function (require, module, exports) {
+		}, { "../util/nodeutils": 26, "jsontoxml": 7 }], 23: [function (require, module, exports) {
+			var reporters = require('../reporters');
+
+			var isBrowser = new Function("try { return this === window } catch (e) { return false }");
+
+			var runner = function runner(instances) {
+				return function () {
+					var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+
+					if (isBrowser()) throw new Error('Runner is not adapted for browsers yet.' + ' Use regular Gunner');
+
+					instances = Array.isArray(instances) ? instances : [instances];
+
+					if (!instances.length) throw new Error("No instances were passed to Gunner Runner");
+
+					var type = instances[0].__proto__.constructor.name;
+
+					if (type !== "Gunner" && type !== "Strategy") throw new Error("Runner " + type + " is not one of Gunner or Strategy");
+
+					var RunInstances = instances.filter(function (i) {
+						return i.__proto__.constructor.name === type;
+					});
+
+					if (RunInstances.length !== instances.length) throw new Error("Not all instances were of type " + type);
+
+					var perf = { start: Date.now() };
+
+					return Promise.all(RunInstances.map(function (instance) {
+						return instance.run({ reporter: 'min' });
+					})).then(function (results) {
+						perf.end = Date.now();
+						results.start = perf.start.toUTCString();
+						results.end = perf.end.toUTCString();
+						results.duration = perf.end - perf.start;
+
+						return options.request ? _defineProperty2({
+							default: results
+						}, options.request, reporters[options.request].convert(results)) : results;
+					});
+				};
+			};
+
+			module.exports = runner;
+		}, { "../reporters": 19 }], 24: [function (require, module, exports) {
 			var _require10 = require('os'),
 			    EOL = _require10.EOL;
 
@@ -2074,7 +2120,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 					skip: ['skip', 'skipping', 'skipped']
 				}
 			};
-		}, { "os": 8 }], 24: [function (require, module, exports) {
+		}, { "os": 8 }], 25: [function (require, module, exports) {
 			var _stringify = require('json-stringify-safe');
 
 			var isObject = function isObject(x) {
@@ -2086,9 +2132,9 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 			};
 
 			var deepFlatten = function deepFlatten(arr) {
-				var _ref6;
+				var _ref7;
 
-				return (_ref6 = []).concat.apply(_ref6, _toConsumableArray2(arr.map(function (v) {
+				return (_ref7 = []).concat.apply(_ref7, _toConsumableArray2(arr.map(function (v) {
 					return Array.isArray(v) ? deepFlatten(v) : v;
 				})));
 			};
@@ -2281,7 +2327,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 				}
 
 			};
-		}, { "json-stringify-safe": 6 }], 25: [function (require, module, exports) {
+		}, { "json-stringify-safe": 6 }], 26: [function (require, module, exports) {
 			(function (process) {
 				module.exports = {
 
@@ -2295,7 +2341,7 @@ function _toConsumableArray2(arr) { if (Array.isArray(arr)) { for (var i = 0, ar
 
 				};
 			}).call(this, require('_process'));
-		}, { "_process": 9 }], 26: [function (require, module, exports) {
+		}, { "_process": 9 }], 27: [function (require, module, exports) {
 			module.exports = {
 
 				Start: Symbol('Start'),
