@@ -45,9 +45,7 @@ var toJSON = function toJSON(resultsArray) {
               name: r.description,
               time: r.duration / 1000 || 0
             }
-          }, _typeof(content) === 'object' && {
-            text: content && content.stack
-          }, _typeof(content) === 'object' && {
+          }, _typeof(content) === 'object' && content, _typeof(content) === 'object' && {
             children: [content]
           }));
           return acc;

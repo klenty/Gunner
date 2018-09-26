@@ -32,7 +32,7 @@ const toJSON = resultsArray => {
 							time: (r.duration / 1000) || 0,
 						},
 						...(typeof content === 'object'
-							&& { text: content && content.stack }),
+							&& content),
 						...(typeof content === 'object'
 							&& { children: [ content ]}),
 					});

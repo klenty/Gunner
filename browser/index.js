@@ -2472,9 +2472,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
                     name: r.description,
                     time: r.duration / 1000 || 0
                   }
-                }, _typeof2(content) === 'object' && {
-                  text: content && content.stack
-                }, _typeof2(content) === 'object' && {
+                }, _typeof2(content) === 'object' && content, _typeof2(content) === 'object' && {
                   children: [content]
                 }));
                 return acc;
