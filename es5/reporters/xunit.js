@@ -11,6 +11,10 @@ var toXML = require('jsontoxml');
 var _require = require('../util/nodeutils'),
     clear = _require.clear;
 
+var escapeXML = function escapeXML(str) {
+  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
 var toJSON = function toJSON(resultsArray) {
   return {
     testsuites: resultsArray.map(function (results) {
@@ -22,7 +26,7 @@ var toJSON = function toJSON(resultsArray) {
       return {
         name: 'testsuite',
         attrs: {
-          name: name,
+          name: escapeXML(name),
           tests: count,
           success: success.length,
           failures: failures.length,
@@ -32,20 +36,17 @@ var toJSON = function toJSON(resultsArray) {
         },
         children: results.reduce(function (acc, r) {
           var reason = r.reason ? r.reason.stack || r.reason : '';
-          var content = r.status !== 'ok' && r.status === 'skip' ? {
-            name: 'skipped',
-            text: reason
-          } : {
-            name: 'failure',
-            text: reason
+          var content = r.status !== 'ok' && {
+            name: r.status === 'skip' ? 'skipped' : 'failure',
+            text: escapeXML(reason)
           };
           acc.push(_objectSpread({
             name: 'testcase',
             attrs: {
-              name: r.description,
+              name: escapeXML(r.description),
               time: r.duration / 1000 || 0
             }
-          }, _typeof(content) === 'object' && content, _typeof(content) === 'object' && {
+          }, _typeof(content) === 'object' && {
             children: [content]
           }));
           return acc;

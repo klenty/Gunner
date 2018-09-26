@@ -2442,6 +2442,10 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
       var _require9 = require('../util/nodeutils'),
           clear = _require9.clear;
 
+      var escapeXML = function escapeXML(str) {
+        return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      };
+
       var toJSON = function toJSON(resultsArray) {
         return {
           testsuites: resultsArray.map(function (results) {
@@ -2453,7 +2457,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
             return {
               name: 'testsuite',
               attrs: {
-                name: name,
+                name: escapeXML(name),
                 tests: count,
                 success: success.length,
                 failures: failures.length,
@@ -2463,20 +2467,17 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
               },
               children: results.reduce(function (acc, r) {
                 var reason = r.reason ? r.reason.stack || r.reason : '';
-                var content = r.status !== 'ok' && r.status === 'skip' ? {
-                  name: 'skipped',
-                  text: reason
-                } : {
-                  name: 'failure',
-                  text: reason
+                var content = r.status !== 'ok' && {
+                  name: r.status === 'skip' ? 'skipped' : 'failure',
+                  text: escapeXML(reason)
                 };
                 acc.push(_objectSpread({
                   name: 'testcase',
                   attrs: {
-                    name: r.description,
+                    name: escapeXML(r.description),
                     time: r.duration / 1000 || 0
                   }
-                }, _typeof2(content) === 'object' && content, _typeof2(content) === 'object' && {
+                }, _typeof2(content) === 'object' && {
                   children: [content]
                 }));
                 return acc;
