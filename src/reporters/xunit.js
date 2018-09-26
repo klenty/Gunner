@@ -1,6 +1,13 @@
 const toXML = require('jsontoxml');
 const { clear } = require('../util/nodeutils');
 
+const escapeXML = str =>
+	str
+	.replace(/&/g, '&amp;')
+	.replace(/"/g, '&quot;')
+	.replace(/</g, '&lt;')
+	.replace(/>/g, '&gt;');
+
 const toJSON = resultsArray => {
 
 	return {
@@ -11,7 +18,7 @@ const toJSON = resultsArray => {
 			return {
 				name: 'testsuite',
 				attrs: {
-					name,
+					name: escapeXML(name),
 					tests: count,
 					success: success.length,
 					failures: failures.length,
@@ -20,19 +27,19 @@ const toJSON = resultsArray => {
 					time: (results.duration / 1000) || 0,
 				},
 				children: results.reduce((acc, r) => {
-					const reason = r.reason ? (r.reason.stack || r.reason) : '';
+					const reason = r.reason
+						? (r.reason.stack || r.reason) : '';
 					const content = r.status !== 'ok' &&
-						r.status === 'skip'
-						? { name: 'skipped', text: reason }
-						: { name: 'failure', text: reason };
+						{
+							name: r.status === 'skip' ? 'skipped' : 'failure',
+							text: escapeXML(reason)
+						};
 					acc.push({
 						name: 'testcase',
 						attrs: {
-							name: r.description,
+							name: escapeXML(r.description),
 							time: (r.duration / 1000) || 0,
 						},
-						...(typeof content === 'object'
-							&& content),
 						...(typeof content === 'object'
 							&& { children: [ content ]}),
 					});
