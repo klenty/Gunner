@@ -2204,6 +2204,10 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
 
       var buildTestQueue = require('./buildTestQueue');
 
+      var getError = function getError(E) {
+        return E.error.stack || E.error;
+      };
+
       var findSkip = function findSkip(skip, unit) {
         var startFailed = skip.findIndex(function (x) {
           return x.type === '@start';
@@ -2214,7 +2218,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
         var beforeFailed = skip.findIndex(function (x) {
           return x.description === unit.description;
         });
-        return startFailed !== -1 && 'A start hook failed\n' + skip[startFailed].error || everyFailed !== -1 && 'An every hook failed\n' + skip[everyFailed].error || beforeFailed !== -1 && 'A before test hook failed\n' + skip[beforeFailed].error;
+        return startFailed !== -1 && 'A start hook failed\n' + getError(skip[startFailed]) || everyFailed !== -1 && 'An every hook failed\n' + getError(skip[everyFailed].error) || beforeFailed !== -1 && 'A before test hook failed\n' + getError(skip[beforeFailed]);
       };
 
       var reduceQueue = function reduceQueue(queue) {

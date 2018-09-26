@@ -9,6 +9,8 @@ const { eventMap } = require('../util/constants');
 const emitter = require('./emitter');
 const buildTestQueue = require('./buildTestQueue');
 
+const getError = E => E.error.stack || E.error;
+
 const findSkip = (skip, unit) => {
 
 	const startFailed = skip.findIndex(x =>
@@ -20,13 +22,13 @@ const findSkip = (skip, unit) => {
 
 	return (startFailed !== -1
 			&& 'A start hook failed\n'
-			+ skip[startFailed].error)
+			+ getError(skip[startFailed]))
 		|| (everyFailed !== -1
 			&& 'An every hook failed\n'
-			+ skip[everyFailed].error)
+			+ getError(skip[everyFailed].error))
 		|| (beforeFailed !== -1
 			&& 'A before test hook failed\n'
-			+ skip[beforeFailed].error);
+			+ getError(skip[beforeFailed]));
 
 };
 
